@@ -7,8 +7,24 @@
   <style>
     @font-face {
       font-family: "Axiforma";
+      src: url("assets/axiforma-semibold.woff2") format("woff2");
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Axiforma";
       src: url("assets/axiforma-bold.woff2") format("woff2");
       font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Axiforma";
+      src: url("assets/axiforma-black.woff2") format("woff2");
+      font-weight: 900;
       font-style: normal;
       font-display: swap;
     }
@@ -150,19 +166,17 @@
 
     .hero {
       position: relative;
-      min-height: 100vh;
+      min-height: 85vh;
       overflow: hidden;
       background: var(--hero-blue);
     }
 
     .slides {
       position: absolute;
-      top: 0;
-      left: 12px;
-      right: 12px;
-      bottom: 0;
-      border-radius: 0 0 24px 24px;
+      inset: 0;
+      border-radius: 0 0 40px 40px;
       overflow: hidden;
+      background: var(--slide-bg-fallback, #2146AD);
     }
 
     .slide {
@@ -170,18 +184,16 @@
       inset: 0;
       display: flex;
       align-items: flex-end;
-      padding: 0 max(32px, calc((100vw - 1200px) / 2));
-      padding-bottom: 160px;
+      padding: 0 max(56px, calc((100vw - 1140px) / 2));
+      padding-bottom: 105px;
       opacity: 0;
-      visibility: hidden;
       background: var(--slide-bg);
-      transition: opacity 800ms ease, visibility 800ms ease;
+      transition: opacity 800ms ease;
     }
 
     .slide.is-active {
       z-index: 2;
       opacity: 1;
-      visibility: visible;
     }
 
     .slide-1 { --slide-bg: #2146AD; }
@@ -193,10 +205,14 @@
       z-index: 2;
       width: 100%;
       max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
     }
 
     .eyebrow {
       display: inline-flex;
+      align-self: flex-start;
       align-items: center;
       height: 34px;
       padding: 0 16px;
@@ -219,34 +235,37 @@
       margin: 0;
       font-family: "Axiforma", sans-serif;
       font-size: clamp(3.4rem, 7.2vw, 5.8rem);
-      font-weight: 700;
+      font-weight: 900;
       line-height: 0.94;
       letter-spacing: -0.05em;
       color: var(--white);
     }
 
     .hero-desc {
-      max-width: 600px;
+      max-width: 620px;
       margin: 20px 0 0;
       font-family: "Axiforma", sans-serif;
       font-size: clamp(1rem, 1.2vw, 1.18rem);
-      font-weight: 700;
+      font-weight: 600;
       line-height: 1.55;
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.6);
     }
 
     .hero-bottom {
       position: absolute;
       bottom: 0;
-      left: 12px;
-      right: 12px;
+      left: 0;
+      right: 0;
       z-index: 5;
-      padding: 0 max(32px, calc((100vw - 1200px) / 2)) 40px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 max(56px, calc((100vw - 1140px) / 2)) 40px;
+      will-change: transform;
     }
 
     .hero-actions {
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
       gap: 12px;
     }
@@ -270,11 +289,18 @@
       color: var(--black);
       background: var(--white);
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      animation: btnPulse 2.8s ease-in-out infinite;
     }
 
     .btn-primary:hover {
-      transform: translateY(-2px);
+      transform: translateY(-2px) scale(1);
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      animation: none;
+    }
+
+    @keyframes btnPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); }
+      50% { transform: scale(1.03); box-shadow: 0 4px 16px rgba(255, 255, 255, 0.12); }
     }
 
     .btn-secondary {
@@ -301,28 +327,31 @@
     .slider-nav {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-top: 24px;
+      gap: 6px;
     }
 
-    .slider-dot {
-      width: 28px;
-      height: 3px;
+    .slider-arrow {
+      display: inline-grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
       padding: 0;
-      background: rgba(255, 255, 255, 0.22);
-      border: 0;
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 999px;
       cursor: pointer;
-      transition: width 300ms ease, background 300ms ease;
+      transition: background 180ms ease, transform 180ms ease;
     }
 
-    .slider-dot.is-active {
-      width: 48px;
-      background: var(--white);
+    .slider-arrow:hover {
+      background: rgba(255, 255, 255, 0.16);
+      transform: scale(1.05);
     }
 
-    .slider-dot:hover {
-      background: rgba(255, 255, 255, 0.45);
+    .slider-arrow svg {
+      width: 14px;
+      height: 14px;
     }
 
     @media (max-width: 920px) {
@@ -369,21 +398,19 @@
       }
 
       .slides {
-        left: 8px;
-        right: 8px;
-        border-radius: 0 0 18px 18px;
+        border-radius: 0 0 28px 28px;
       }
 
       .slide {
-        padding: 0 20px;
-        padding-bottom: 190px;
+        padding: 0 24px;
+        padding-bottom: 140px;
       }
 
       .eyebrow {
         height: 30px;
         padding: 0 12px;
         font-size: clamp(0.52rem, 2.8vw, 0.6rem);
-        margin-bottom: 14px;
+        margin-bottom: 16px;
       }
 
       .hero h1 {
@@ -391,14 +418,15 @@
       }
 
       .hero-desc {
-        margin-top: 16px;
+        margin-top: 18px;
         font-size: clamp(0.92rem, 4vw, 1.04rem);
       }
 
       .hero-bottom {
-        left: 8px;
-        right: 8px;
-        padding: 0 20px 28px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+        padding: 0 20px 24px;
       }
 
       .hero-actions {
@@ -412,8 +440,9 @@
         border-radius: 10px;
       }
 
-      .slider-nav {
-        margin-top: 22px;
+      .slider-arrow {
+        width: 36px;
+        height: 36px;
       }
     }
 
@@ -486,16 +515,19 @@
         <a class="btn btn-secondary" href="#contato">Solicitar contato <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
       </div>
       <nav class="slider-nav" aria-label="Controles do banner">
-        <button class="slider-dot is-active" type="button" data-slide="0" aria-label="Banner 1"></button>
-        <button class="slider-dot" type="button" data-slide="1" aria-label="Banner 2"></button>
-        <button class="slider-dot" type="button" data-slide="2" aria-label="Banner 3"></button>
+        <button class="slider-arrow" type="button" data-dir="-1" aria-label="Anterior"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4l-4 4 4 4"/></svg></button>
+        <button class="slider-arrow" type="button" data-dir="1" aria-label="Próximo"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg></button>
       </nav>
     </div>
   </main>
 
+  <section class="blue-extend" style="background:var(--hero-blue);min-height:100vh;"></section>
+
   <script>
     const slides = Array.from(document.querySelectorAll(".slide"));
-    const dots = Array.from(document.querySelectorAll(".slider-dot"));
+    const arrows = Array.from(document.querySelectorAll(".slider-arrow"));
+    const slidesContainer = document.querySelector(".slides");
+    const colors = ["#2146AD", "#10131F", "#08715F"];
     const INTERVAL = 12000;
     let cur = 0;
     let timer = setInterval(next, INTERVAL);
@@ -503,7 +535,7 @@
     function go(i) {
       cur = (i + slides.length) % slides.length;
       slides.forEach((s, idx) => s.classList.toggle("is-active", idx === cur));
-      dots.forEach((d, idx) => d.classList.toggle("is-active", idx === cur));
+      slidesContainer.style.background = colors[cur];
     }
 
     function next() { go(cur + 1); }
@@ -513,7 +545,16 @@
       timer = setInterval(next, INTERVAL);
     }
 
-    dots.forEach(d => d.addEventListener("click", () => { go(+d.dataset.slide); reset(); }));
+    arrows.forEach(a => a.addEventListener("click", () => { go(cur + +a.dataset.dir); reset(); }));
+
+    const heroBottom = document.querySelector(".hero-bottom");
+    const hero = document.querySelector(".hero");
+    window.addEventListener("scroll", () => {
+      const rect = hero.getBoundingClientRect();
+      if (rect.bottom < 0) return;
+      const t = Math.max(0, window.scrollY / hero.offsetHeight);
+      heroBottom.style.transform = "translateY(" + (-t * 40) + "px)";
+    }, { passive: true });
   </script>
 </body>
 </html>
