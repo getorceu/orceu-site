@@ -650,32 +650,35 @@
 
     .diagnostic {
       position: relative;
-      padding: clamp(48px, 5vw, 64px) max(24px, calc((100vw - 1200px) / 2));
+      padding: clamp(48px, 5vw, 60px) 0;
       overflow: hidden;
-      background: #2E49CB;
+      background: #2146AD;
     }
 
-    .diagnostic::before {
+    .diagnostic-bg {
+      position: absolute;
+      inset: 0;
+      background: #1a3a94;
+      border-radius: 0;
+    }
+
+    .diagnostic-bg::after {
       position: absolute;
       inset: 0;
       content: "";
-      background: linear-gradient(135deg, #2C46C8 0%, #2943BD 48%, #304FD2 100%);
-    }
-
-    .diagnostic::after {
-      position: absolute;
-      inset: 0;
-      content: "";
-      background: radial-gradient(circle at 88% 10%, rgba(255, 255, 255, 0.08), transparent 32%);
+      background: radial-gradient(circle at 82% 14%, rgba(255, 255, 255, 0.06), transparent 36%);
     }
 
     .diagnostic-shell {
       position: relative;
       z-index: 1;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 420px;
-      gap: clamp(40px, 5vw, 80px);
+      grid-template-columns: minmax(0, 1fr) 370px;
+      gap: clamp(36px, 4.5vw, 64px);
       align-items: stretch;
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 max(56px, calc((100vw - 1140px) / 2));
     }
 
     .diagnostic-left {
@@ -689,14 +692,14 @@
       display: inline-flex;
       align-self: flex-start;
       align-items: center;
-      gap: 10px;
-      min-height: 34px;
-      padding: 0 18px;
+      gap: 8px;
+      min-height: 30px;
+      padding: 0 14px;
       margin: 0;
       color: rgba(255, 255, 255, 0.9);
-      font-size: 0.68rem;
+      font-size: clamp(0.54rem, 0.62vw, 0.6rem);
       font-weight: 600;
-      letter-spacing: 0.28em;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       background: rgba(255, 255, 255, 0.035);
       border: 1px solid rgba(255, 255, 255, 0.18);
@@ -704,20 +707,20 @@
     }
 
     .diagnostic-tag::before {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       content: "";
       background: rgba(255, 255, 255, 0.75);
       border-radius: 999px;
     }
 
     .diagnostic-head h3 {
-      max-width: 720px;
+      max-width: 660px;
       margin: 0;
-      font-size: clamp(2.4rem, 4.4vw, 4.35rem);
+      font-size: clamp(2.2rem, 3.8vw, 3.6rem);
       font-weight: 300;
-      line-height: 0.92;
-      letter-spacing: -0.045em;
+      line-height: 0.94;
+      letter-spacing: -0.04em;
       color: var(--white);
     }
 
@@ -736,7 +739,7 @@
     .diagnostic-copy {
       margin: 0 0 10px;
       color: rgba(255, 255, 255, 0.8);
-      font-size: clamp(0.96rem, 1.12vw, 1.15rem);
+      font-size: clamp(0.88rem, 1.02vw, 1rem);
       font-weight: 400;
       line-height: 1.32;
     }
@@ -750,9 +753,9 @@
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       color: rgba(255, 255, 255, 0.55);
-      font-size: 0.82rem;
+      font-size: 0.76rem;
       font-weight: 500;
     }
 
@@ -767,11 +770,11 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      min-height: 68px;
-      padding: 0 14px 0 28px;
+      min-height: 56px;
+      padding: 0 10px 0 24px;
       color: #081744;
       font-family: "Axiforma", sans-serif;
-      font-size: clamp(0.96rem, 1.08vw, 1.05rem);
+      font-size: clamp(0.86rem, 0.96vw, 0.94rem);
       font-weight: 600;
       text-decoration: none;
       background: var(--white);
@@ -792,8 +795,8 @@
     .diagnostic-open-icon {
       display: inline-grid;
       place-items: center;
-      width: 44px;
-      height: 44px;
+      width: 38px;
+      height: 38px;
       flex: 0 0 auto;
       color: var(--white);
       background: #081744;
@@ -806,8 +809,8 @@
     }
 
     .diagnostic-open-icon svg {
-      width: 20px;
-      height: 20px;
+      width: 17px;
+      height: 17px;
     }
 
     .quiz-button svg {
@@ -1277,13 +1280,9 @@
         margin-left: auto;
       }
 
-      .diagnostic {
-        padding-right: 20px;
-        padding-left: 20px;
-      }
-
       .diagnostic-shell {
         grid-template-columns: 1fr;
+        padding: 0 20px;
       }
 
       .diagnostic-right {
@@ -1616,6 +1615,7 @@
   </section>
 
   <section id="diagnostico" class="diagnostic" aria-labelledby="diagnostic-title">
+    <div class="diagnostic-bg"></div>
     <div class="diagnostic-shell">
       <div class="diagnostic-left">
         <p class="diagnostic-tag">Engenheiro, arquiteto, dono de construtora</p>
