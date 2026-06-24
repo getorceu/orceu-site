@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orceu Radar</title>
+  <meta
+    name="description"
+    content="Notícias, tendências e movimentos que impactam a gestão de obras, construtoras e o futuro da construção civil."
+  >
+  <link rel="canonical" href="https://www.orceu.com.br/radar/">
+  <style>
+    @font-face {
+      font-family: "Axiforma";
+      src: url("/assets/axiforma-book.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Axiforma";
+      src: url("/assets/axiforma-semibold.woff2") format("woff2");
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Axiforma";
+      src: url("/assets/axiforma-bold.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Axiforma";
+      src: url("/assets/axiforma-black.woff2") format("woff2");
+      font-weight: 900;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --white: #ffffff;
+      --azul-real: #2146ad;
+      --azul-medio: #193b95;
+      --azul-noite: #142f79;
+      --azul-abismo: #0f2560;
+      --texto-claro: #edf2fd;
+      --line: rgba(255, 255, 255, 0.12);
+      --line-soft: rgba(255, 255, 255, 0.08);
+      --glass: rgba(8, 17, 42, 0.62);
+      --glass-strong: rgba(6, 12, 31, 0.82);
+      --muted: rgba(237, 242, 253, 0.72);
+      --muted-strong: rgba(237, 242, 253, 0.88);
+      --accent: #56e268;
+      --accent-blue: #6eb5ff;
+      --shadow: 0 24px 54px rgba(4, 10, 32, 0.28);
+      --radius-lg: 32px;
+      --radius-md: 24px;
+      --radius-sm: 18px;
+      --shell: min(1140px, calc(100vw - 48px));
+      --mobile-gutter: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--azul-real);
+      font-family: "Axiforma", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--white);
+      background: transparent;
+      font-family: "Axiforma", sans-serif;
+      overflow-x: hidden;
+    }
+
+    img,
+    svg {
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .fundo-chique {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      background:
+        radial-gradient(120% 115% at 50% -8%, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 20%, transparent 42%),
+        linear-gradient(180deg, #2b56c4 0%, var(--azul-real) 24%, var(--azul-real) 68%, var(--azul-medio) 100%);
+    }
+
+    .aurora {
+      position: absolute;
+      width: 56vmax;
+      height: 56vmax;
+      border-radius: 50%;
+      filter: blur(78px);
+      mix-blend-mode: screen;
+      opacity: 0.42;
+    }
+
+    .aurora-1 {
+      top: -18vmax;
+      left: -12vmax;
+      background: radial-gradient(closest-side, rgba(255, 255, 255, 0.18), rgba(140, 185, 255, 0.14) 42%, transparent 72%);
+      animation: deriva-1 34s ease-in-out infinite alternate;
+    }
+
+    .aurora-2 {
+      right: -12vmax;
+      bottom: -22vmax;
+      background: radial-gradient(closest-side, rgba(94, 161, 255, 0.18), rgba(255, 255, 255, 0.06) 40%, transparent 72%);
+      animation: deriva-2 42s ease-in-out infinite alternate;
+    }
+
+    .aneis {
+      position: absolute;
+      inset: 0;
+      opacity: 0.34;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.085) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.085) 1px, transparent 1px),
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-position: 0 0, 0 0, -1px -1px, -1px -1px;
+      background-size: 64px 64px, 64px 64px, 160px 160px, 160px 160px;
+      animation: grade-deriva 28s linear infinite;
+    }
+
+    .aneis::after {
+      position: absolute;
+      inset: 0;
+      content: "";
+      background:
+        radial-gradient(80% 60% at 50% 18%, rgba(255, 255, 255, 0.08), transparent 70%),
+        radial-gradient(70% 80% at 50% 100%, rgba(8, 20, 61, 0.16), transparent 72%);
+      opacity: 0.75;
+      animation: grade-pulso 10s ease-in-out infinite alternate;
+    }
+
+    .grao {
+      position: absolute;
+      inset: 0;
+      opacity: 0.08;
+      mix-blend-mode: soft-light;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%25" height="100%25" filter="url(%23n)" opacity="0.55"/></svg>');
+    }
+
+    .vinheta {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(120% 100% at 50% 42%, transparent 48%, rgba(9, 24, 70, 0.24) 100%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(7, 20, 56, 0.18));
+    }
+
+    @keyframes deriva-1 {
+      from { transform: translate(0, 0) scale(1); }
+      to { transform: translate(5vmax, 3vmax) scale(1.08); }
+    }
+
+    @keyframes deriva-2 {
+      from { transform: translate(0, 0) scale(1.02); }
+      to { transform: translate(-4vmax, -3vmax) scale(1.08); }
+    }
+
+    @keyframes grade-deriva {
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(18px, 12px, 0); }
+    }
+
+    @keyframes grade-pulso {
+      from { opacity: 0.54; }
+      to { opacity: 0.82; }
+    }
+
+    .site-header {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: 999;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      pointer-events: none;
+      transition: top 420ms cubic-bezier(0.16, 1, 0.3, 1), padding 420ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .navbar {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: 18px;
+      min-height: 60px;
+      width: 100%;
+      padding: 10px max(24px, calc((100vw - 1120px) / 2));
+      background: linear-gradient(180deg, rgba(33, 70, 173, 0.96) 0%, rgba(28, 60, 150, 0.92) 100%);
+      border-bottom: 1px solid rgba(221, 233, 255, 0.14);
+      box-shadow: 0 6px 22px rgba(4, 10, 32, 0.14);
+      pointer-events: auto;
+      transition:
+        max-width 420ms cubic-bezier(0.16, 1, 0.3, 1),
+        min-height 420ms cubic-bezier(0.16, 1, 0.3, 1),
+        padding 420ms cubic-bezier(0.16, 1, 0.3, 1),
+        border-radius 420ms cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 320ms ease,
+        background 420ms ease,
+        box-shadow 420ms cubic-bezier(0.16, 1, 0.3, 1),
+        transform 420ms cubic-bezier(0.16, 1, 0.3, 1),
+        backdrop-filter 420ms ease;
+    }
+
+    .navbar::after {
+      position: absolute;
+      inset: 0;
+      content: "";
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 58%);
+      opacity: 0.36;
+    }
+
+    .site-header.is-scrolled {
+      top: 14px;
+      padding-right: max(56px, calc((100vw - 1140px) / 2));
+      padding-left: max(56px, calc((100vw - 1140px) / 2));
+    }
+
+    .site-header.is-scrolled .navbar {
+      max-width: 1140px;
+      min-height: 56px;
+      padding: 8px 22px;
+      background:
+        radial-gradient(120% 160% at 12% 0%, rgba(82, 130, 255, 0.2), transparent 48%),
+        linear-gradient(180deg, rgba(10, 20, 48, 0.7), rgba(7, 14, 35, 0.58));
+      border: 1px solid rgba(226, 237, 255, 0.24);
+      border-radius: 18px;
+      box-shadow:
+        0 18px 42px rgba(4, 10, 32, 0.32),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(22px) saturate(165%);
+      transform: scale(0.992);
+    }
+
+    .brand,
+    .nav-cta {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .brand img {
+      display: block;
+      width: clamp(88px, 8.8vw, 110px);
+      height: auto;
+      transition: width 240ms ease;
+    }
+
+    .site-header.is-scrolled .brand img {
+      width: clamp(78px, 7.6vw, 96px);
+    }
+
+    .nav-links {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .nav-links > li > a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 0 14px;
+      color: rgba(244, 248, 255, 0.88);
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 999px;
+      transition: color 180ms ease, background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .nav-links > li > a:hover,
+    .nav-links > li > a:focus-visible,
+    .nav-links > li > a.is-active {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .nav-links > li > a.is-active {
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .nav-cta {
+      justify-self: end;
+    }
+
+    .nav-cta a,
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      height: 52px;
+      padding: 0 28px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: 0;
+      border-radius: 18px;
+      transition: transform 200ms ease, background 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+    }
+
+    .nav-cta a,
+    .btn-primary {
+      color: #ffffff;
+      background: linear-gradient(180deg, #3fe45a 0%, #20c45a 56%, #14a946 100%);
+      box-shadow:
+        0 14px 28px rgba(20, 169, 70, 0.24),
+        inset 0 1px 0 rgba(255, 255, 255, 0.24),
+        inset 0 -1px 0 rgba(5, 99, 39, 0.2);
+    }
+
+    .nav-cta a:hover,
+    .btn-primary:hover,
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      color: rgba(255, 255, 255, 0.95);
+      background: rgba(88, 116, 209, 0.74);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .btn svg,
+    .nav-cta a svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 200ms ease;
+      flex-shrink: 0;
+    }
+
+    .btn:hover svg,
+    .nav-cta a:hover svg {
+      transform: translateX(3px);
+    }
+
+    .mobile-nav-toggle {
+      display: none;
+      position: relative;
+      z-index: 2;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      color: var(--white);
+      background: transparent;
+      border: 0;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .mobile-nav-toggle span {
+      position: absolute;
+      left: 12px;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      border-radius: 999px;
+      transition: transform 220ms ease, opacity 180ms ease;
+    }
+
+    .mobile-nav-toggle span:nth-child(1) {
+      transform: translateY(-6px);
+    }
+
+    .mobile-nav-toggle span:nth-child(3) {
+      transform: translateY(6px);
+    }
+
+    .site-header.mobile-menu-open .mobile-nav-toggle span:nth-child(1) {
+      transform: rotate(45deg);
+    }
+
+    .site-header.mobile-menu-open .mobile-nav-toggle span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .site-header.mobile-menu-open .mobile-nav-toggle span:nth-child(3) {
+      transform: rotate(-45deg);
+    }
+
+    .page-shell {
+      width: var(--shell);
+      margin: 0 auto;
+    }
+
+    .hero-radar {
+      position: relative;
+      padding: 164px 0 44px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+      gap: 26px;
+      align-items: end;
+    }
+
+    .hero-copy {
+      position: relative;
+      padding: clamp(28px, 4vw, 42px);
+      background:
+        radial-gradient(110% 120% at 12% 0%, rgba(106, 161, 255, 0.18), transparent 46%),
+        linear-gradient(180deg, rgba(9, 20, 51, 0.86), rgba(5, 11, 29, 0.72));
+      border: 1px solid rgba(226, 237, 255, 0.18);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(20px) saturate(155%);
+      overflow: hidden;
+    }
+
+    .hero-copy::before {
+      position: absolute;
+      inset: 16px;
+      content: "";
+      border: 1px solid rgba(159, 188, 245, 0.12);
+      border-radius: calc(var(--radius-lg) - 12px);
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: linear-gradient(135deg, #000 62%, transparent 100%);
+      opacity: 0.58;
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 20px;
+      padding: 8px 14px;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+    }
+
+    .eyebrow::before {
+      width: 8px;
+      height: 8px;
+      content: "";
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 12px rgba(86, 226, 104, 0.42);
+    }
+
+    h1 {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      font-size: clamp(3.2rem, 7vw, 6rem);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: -0.06em;
+    }
+
+    .hero-copy p {
+      position: relative;
+      z-index: 1;
+      max-width: 36ch;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.2vw, 1.1rem);
+      line-height: 1.65;
+    }
+
+    .hero-actions {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .hero-notes {
+      display: grid;
+      gap: 16px;
+    }
+
+    .signal-card,
+    .spotlight-card,
+    .news-card,
+    .cta-panel {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(120% 160% at 10% 0%, rgba(102, 146, 255, 0.16), transparent 46%),
+        linear-gradient(180deg, rgba(9, 20, 51, 0.78), rgba(5, 11, 29, 0.66));
+      border: 1px solid rgba(226, 237, 255, 0.16);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px) saturate(155%);
+    }
+
+    .signal-card {
+      display: grid;
+      gap: 18px;
+      padding: 24px;
+      min-height: 100%;
+    }
+
+    .signal-card::before,
+    .spotlight-card::before,
+    .news-card::before,
+    .cta-panel::before {
+      position: absolute;
+      inset: 14px;
+      content: "";
+      border: 1px solid rgba(159, 188, 245, 0.1);
+      border-radius: calc(var(--radius-lg) - 12px);
+      pointer-events: none;
+    }
+
+    .signal-label {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      gap: 10px;
+      padding: 7px 12px;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+    }
+
+    .signal-label::before {
+      width: 7px;
+      height: 7px;
+      content: "";
+      background: var(--accent-blue);
+      border-radius: 50%;
+      box-shadow: 0 0 12px rgba(110, 181, 255, 0.4);
+    }
+
+    .signal-card h2,
+    .section-head h2,
+    .cta-panel h2 {
+      margin: 0;
+      font-size: clamp(1.7rem, 3.1vw, 2.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+    }
+
+    .signal-card p,
+    .section-head p,
+    .spotlight-copy p,
+    .news-card p,
+    .cta-panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.62;
+    }
+
+    .signal-points {
+      display: grid;
+      gap: 12px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .signal-points li {
+      display: grid;
+      grid-template-columns: 14px 1fr;
+      gap: 12px;
+      color: var(--muted-strong);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .signal-points li::before {
+      width: 14px;
+      height: 14px;
+      margin-top: 2px;
+      content: "";
+      border: 1px solid rgba(159, 188, 245, 0.28);
+      border-radius: 4px;
+      background:
+        linear-gradient(180deg, rgba(63, 228, 90, 0.72), rgba(20, 169, 70, 0.4));
+      box-shadow: 0 0 14px rgba(63, 228, 90, 0.16);
+    }
+
+    .section-head {
+      display: grid;
+      gap: 16px;
+      max-width: 780px;
+      margin-bottom: 28px;
+    }
+
+    .section-kicker {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      gap: 10px;
+      margin: 0;
+      padding: 8px 14px;
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+    }
+
+    .section-kicker::before {
+      width: 8px;
+      height: 8px;
+      content: "";
+      background: #ffffff;
+      border-radius: 50%;
+      opacity: 0.85;
+    }
+
+    .radar-section {
+      position: relative;
+      padding: 26px 0 0;
+    }
+
+    .spotlight-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
+      gap: 24px;
+      padding: 24px;
+    }
+
+    .spotlight-copy {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      color: rgba(255, 255, 255, 0.76);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .meta-row .category {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+    }
+
+    .meta-row .category::before {
+      width: 8px;
+      height: 8px;
+      content: "";
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    .spotlight-copy h3,
+    .news-card h3 {
+      margin: 0;
+      font-size: clamp(1.6rem, 2vw, 2.15rem);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .spotlight-impact {
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+    }
+
+    .spotlight-impact strong {
+      display: block;
+      margin: 0;
+      font-size: 0.76rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .spotlight-impact ul {
+      display: grid;
+      gap: 10px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .spotlight-impact li {
+      display: grid;
+      grid-template-columns: 9px 1fr;
+      gap: 12px;
+      color: var(--muted-strong);
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    .spotlight-impact li::before {
+      width: 9px;
+      height: 9px;
+      margin-top: 5px;
+      content: "";
+      border-radius: 50%;
+      background: linear-gradient(180deg, #7ec8ff, #56e268);
+      box-shadow: 0 0 14px rgba(126, 200, 255, 0.28);
+    }
+
+    .spotlight-visual {
+      position: relative;
+      min-height: 360px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(4, 12, 30, 0.22), rgba(4, 12, 30, 0.6)),
+        url("/assets/dashboard.png") center/cover no-repeat;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .spotlight-visual::before {
+      position: absolute;
+      inset: 18px;
+      content: "";
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 18px;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 26px 26px;
+      mask-image: linear-gradient(135deg, #000 62%, transparent 100%);
+    }
+
+    .spotlight-float {
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
+      z-index: 1;
+      max-width: 240px;
+      padding: 16px 18px;
+      background: rgba(4, 10, 28, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      box-shadow: 0 16px 36px rgba(3, 7, 19, 0.28);
+      backdrop-filter: blur(14px);
+    }
+
+    .spotlight-float strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.84);
+    }
+
+    .spotlight-float span {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .news-card {
+      display: grid;
+      gap: 18px;
+      padding: 22px;
+      transition: transform 260ms ease, border-color 260ms ease, box-shadow 260ms ease;
+      scroll-margin-top: 110px;
+    }
+
+    .news-card:hover,
+    .news-card:target {
+      transform: translateY(-6px);
+      border-color: rgba(126, 200, 255, 0.28);
+      box-shadow:
+        0 26px 54px rgba(4, 10, 32, 0.32),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .news-card:target {
+      outline: 2px solid rgba(126, 200, 255, 0.2);
+      outline-offset: 0;
+    }
+
+    .news-card-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .news-category {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+    }
+
+    .news-category::before {
+      width: 8px;
+      height: 8px;
+      content: "";
+      background: var(--accent-blue);
+      border-radius: 50%;
+    }
+
+    .news-card time {
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .news-card h3 {
+      font-size: clamp(1.3rem, 1.55vw, 1.52rem);
+      line-height: 1.18;
+    }
+
+    .news-card p {
+      font-size: 0.96rem;
+    }
+
+    .news-card__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      margin-top: auto;
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: 850;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+
+    .news-card__cta::after {
+      content: "→";
+      font-size: 1rem;
+      transition: transform 180ms ease;
+    }
+
+    .news-card__cta:hover::after,
+    .news-card__cta:focus-visible::after {
+      transform: translateX(4px);
+    }
+
+    .news-card__cta:focus-visible,
+    .btn:focus-visible,
+    .nav-links > li > a:focus-visible,
+    .nav-cta a:focus-visible {
+      outline: 2px dashed rgba(159, 188, 245, 0.8);
+      outline-offset: 4px;
+    }
+
+    .cta-wrap {
+      padding: 34px 0 72px;
+    }
+
+    .cta-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 22px;
+      align-items: center;
+      padding: clamp(26px, 4vw, 40px);
+    }
+
+    .cta-panel p {
+      max-width: 46ch;
+      margin-top: 14px;
+    }
+
+    .cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .footer-note {
+      width: var(--shell);
+      margin: 0 auto 28px;
+      color: rgba(237, 242, 253, 0.52);
+      font-size: 0.82rem;
+      text-align: center;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .aurora,
+      .aneis,
+      .aneis::after {
+        animation: none;
+      }
+
+      .site-header,
+      .navbar,
+      .navbar::after,
+      .brand img,
+      .nav-links > li > a,
+      .btn,
+      .nav-cta a,
+      .news-card {
+        transition: none !important;
+      }
+    }
+
+    @media (max-width: 1120px) {
+      .navbar {
+        grid-template-columns: auto minmax(0, 1fr) auto;
+      }
+
+      .nav-cta {
+        display: none;
+      }
+
+      .hero-grid,
+      .spotlight-card,
+      .cta-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-notes {
+        grid-template-columns: 1fr;
+      }
+
+      .spotlight-visual {
+        min-height: 300px;
+      }
+
+      .news-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 860px) {
+      .site-header {
+        padding-right: 0;
+        padding-left: 0;
+      }
+
+      .navbar {
+        grid-template-columns: auto auto 1fr;
+        gap: 10px;
+        padding-right: var(--mobile-gutter);
+        padding-left: var(--mobile-gutter);
+      }
+
+      .mobile-nav-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .nav-links {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 12px;
+        left: 12px;
+        display: none;
+        gap: 8px;
+        padding: 12px;
+        background:
+          radial-gradient(130% 160% at 16% 0%, rgba(82, 130, 255, 0.22), transparent 46%),
+          linear-gradient(180deg, rgba(8, 17, 42, 0.94), rgba(6, 12, 31, 0.9));
+        border: 1px solid rgba(226, 237, 255, 0.18);
+        border-radius: 20px;
+        box-shadow: 0 22px 54px rgba(4, 10, 32, 0.34);
+        backdrop-filter: blur(22px) saturate(160%);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(-8px) scale(0.98);
+        transform-origin: top center;
+        transition: opacity 220ms ease, transform 240ms cubic-bezier(0.16, 1, 0.3, 1), visibility 220ms ease;
+      }
+
+      .site-header.mobile-menu-open .nav-links,
+      .nav-links.is-open {
+        display: grid;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0) scale(1);
+      }
+
+      .nav-links > li > a {
+        width: 100%;
+        min-height: 46px;
+        justify-content: center;
+        font-size: 0.78rem;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .hero-radar {
+        padding-top: 138px;
+      }
+
+      h1,
+      .section-head h2,
+      .signal-card h2,
+      .cta-panel h2 {
+        text-wrap: balance;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .site-header.is-scrolled {
+        top: 8px;
+        padding-right: 10px;
+        padding-left: 10px;
+      }
+
+      .site-header.is-scrolled .navbar {
+        padding-right: 12px;
+        padding-left: 14px;
+      }
+
+      .page-shell,
+      .footer-note {
+        width: min(100vw - 32px, 1140px);
+      }
+
+      .hero-copy,
+      .signal-card,
+      .spotlight-card,
+      .news-card,
+      .cta-panel {
+        border-radius: 24px;
+      }
+
+      .hero-actions,
+      .cta-actions {
+        width: 100%;
+      }
+
+      .hero-actions .btn,
+      .cta-actions .btn {
+        flex: 1 1 100%;
+      }
+
+      .news-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .spotlight-visual {
+        min-height: 240px;
+      }
+
+      h1 {
+        font-size: clamp(2.55rem, 14vw, 4rem);
+        line-height: 0.94;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="fundo-chique" aria-hidden="true">
+    <div class="aurora aurora-1"></div>
+    <div class="aurora aurora-2"></div>
+    <div class="aneis"></div>
+    <div class="grao"></div>
+    <div class="vinheta"></div>
+  </div>
+
+  <header class="site-header" aria-label="Navegação principal">
+    <nav class="navbar">
+      <a class="brand" href="/" aria-label="Orceu">
+        <img src="/assets/logo-orceu.svg" alt="Orceu">
+      </a>
+
+      <button class="mobile-nav-toggle" type="button" aria-label="Abrir menu" aria-controls="main-navigation" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+
+      <ul class="nav-links" id="main-navigation" aria-label="Seções">
+        <li><a href="/">Início</a></li>
+        <li><a class="is-active" href="/radar/" aria-current="page">Radar</a></li>
+      </ul>
+
+      <div class="nav-cta">
+        <a href="/#contato">Falar com o time
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 8h10M9 4l4 4-4 4"></path>
+          </svg>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero-radar">
+      <div class="page-shell hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Radar editorial Orceu</p>
+          <h1>Orceu Radar</h1>
+          <p>Notícias, tendências e movimentos que impactam a gestão de obras, construtoras e o futuro da construção civil.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="/#contato">Falar com o time
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4"></path>
+              </svg>
+            </a>
+            <a class="btn btn-secondary" href="/#diagnostico">Iniciar diagnóstico</a>
+          </div>
+        </div>
+
+        <aside class="hero-notes" aria-label="Sinais acompanhados pelo Radar">
+          <article class="signal-card">
+            <span class="signal-label">Leitura da semana</span>
+            <h2>O que muda no canteiro quando tecnologia vira rotina</h2>
+            <p>O Radar organiza o ruído do mercado em sinais acionáveis para orçamento, compras, financeiro, planejamento e operação.</p>
+            <ul class="signal-points">
+              <li>IA aplicada sai do discurso e entra no fluxo diário de engenharia, suprimentos e acompanhamento de obra.</li>
+              <li>Construtoras mais ágeis estão tratando informação como ativo operacional, não como relatório tardio.</li>
+              <li>Quem responde rápido a custo, prazo e caixa ganha previsibilidade onde antes havia improviso.</li>
+            </ul>
+          </article>
+        </aside>
+      </div>
+    </section>
+
+    <section class="radar-section" aria-labelledby="radar-destaque-title">
+      <div class="page-shell">
+        <div class="section-head">
+          <p class="section-kicker">Destaque principal</p>
+          <h2 id="radar-destaque-title">A notícia mais importante da semana para quem precisa decidir com a obra rodando.</h2>
+          <p>Um recorte editorial para separar tendência real de manchete vazia e traduzir impacto operacional para a construtora.</p>
+        </div>
+
+        <article class="spotlight-card" id="noticia-destaque">
+          <div class="spotlight-copy">
+            <div class="meta-row">
+              <span class="category">IA aplicada</span>
+              <time datetime="2026-06-24">24 jun 2026</time>
+            </div>
+            <h3>Construtoras começam a integrar IA ao orçamento, suprimentos e acompanhamento de desvios em tempo quase real.</h3>
+            <p>Mais do que automação de tarefas isoladas, o movimento que ganha força é o uso de IA conectada à rotina da obra: leitura de orçamento, apoio na compra, previsão de gargalos e resposta mais rápida sobre margem, prazo e caixa.</p>
+            <div class="spotlight-impact">
+              <strong>Por que isso importa agora</strong>
+              <ul>
+                <li>Decisões deixam de depender de planilhas fragmentadas e passam a nascer com contexto operacional.</li>
+                <li>Compras, financeiro e produção ganham uma linguagem única para priorizar o que mais afeta resultado.</li>
+                <li>O diferencial competitivo migra de “ter software” para “ter sistema que aprende com a obra”.</li>
+              </ul>
+            </div>
+            <a class="news-card__cta" href="#radar-cta">Ler análise</a>
+          </div>
+
+          <div class="spotlight-visual" aria-hidden="true">
+            <div class="spotlight-float">
+              <strong>Radar Orceu</strong>
+              <span>Sinal forte para empresas que querem menos atraso de leitura e mais velocidade de decisão.</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="radar-section" aria-labelledby="radar-news-title">
+      <div class="page-shell">
+        <div class="section-head">
+          <p class="section-kicker">Leituras rápidas</p>
+          <h2 id="radar-news-title">Notícias e tendências para gestão de obras, compras, orçamento, caixa e tecnologia.</h2>
+          <p>Conteúdos estáticos por enquanto, organizados para servir como base editorial da futura área de conteúdo do Orceu Radar.</p>
+        </div>
+
+        <div class="news-grid">
+          <article class="news-card" id="noticia-orcamento">
+            <div class="news-card-head">
+              <span class="news-category">Orçamento</span>
+              <time datetime="2026-06-23">23 jun 2026</time>
+            </div>
+            <h3>Empresas retomam revisão de composições e curva ABC para proteger margem em contratos mais apertados.</h3>
+            <p>Com pressão maior em custo e negociação, a precisão do orçamento volta a ser peça central para compra, cronograma e precificação.</p>
+            <a class="news-card__cta" href="#noticia-orcamento">Ler análise</a>
+          </article>
+
+          <article class="news-card" id="noticia-compras">
+            <div class="news-card-head">
+              <span class="news-category">Compras</span>
+              <time datetime="2026-06-22">22 jun 2026</time>
+            </div>
+            <h3>Suprimentos ganha protagonismo com construtoras encurtando o ciclo entre pedido, aprovação e entrega.</h3>
+            <p>O foco deixa de ser apenas cotar barato e passa a ser abastecer a obra sem travar produção, caixa e produtividade da equipe.</p>
+            <a class="news-card__cta" href="#noticia-compras">Ler análise</a>
+          </article>
+
+          <article class="news-card" id="noticia-financeiro">
+            <div class="news-card-head">
+              <span class="news-category">Financeiro</span>
+              <time datetime="2026-06-21">21 jun 2026</time>
+            </div>
+            <h3>Fluxo de caixa integrado à obra vira prioridade para construtoras que cresceram e perderam visibilidade operacional.</h3>
+            <p>O mercado está pressionando por previsibilidade, e empresas mais maduras estão ligando contas, centros de custo e avanço físico.</p>
+            <a class="news-card__cta" href="#noticia-financeiro">Ler análise</a>
+          </article>
+
+          <article class="news-card" id="noticia-mercado">
+            <div class="news-card-head">
+              <span class="news-category">Mercado</span>
+              <time datetime="2026-06-20">20 jun 2026</time>
+            </div>
+            <h3>Habitação, retrofit e obras industriais puxam novos movimentos de demanda e exigem operação mais enxuta.</h3>
+            <p>Não basta captar obra: o jogo está em sustentar margem e execução num ambiente de concorrência mais disciplinada.</p>
+            <a class="news-card__cta" href="#noticia-mercado">Ler análise</a>
+          </article>
+
+          <article class="news-card" id="noticia-tecnologia">
+            <div class="news-card-head">
+              <span class="news-category">Tecnologia</span>
+              <time datetime="2026-06-19">19 jun 2026</time>
+            </div>
+            <h3>Dashboards operacionais deixam de ser painel bonito e viram mesa de comando para engenheiros e gestores.</h3>
+            <p>Indicadores úteis são os que ajudam a agir cedo: atraso de compra, desvio de insumo, equipe ociosa e caixa pressionado.</p>
+            <a class="news-card__cta" href="#noticia-tecnologia">Ler análise</a>
+          </article>
+
+          <article class="news-card" id="noticia-ia">
+            <div class="news-card-head">
+              <span class="news-category">IA no setor</span>
+              <time datetime="2026-06-18">18 jun 2026</time>
+            </div>
+            <h3>IA começa a ser usada como camada de leitura e decisão, não só como assistente de texto ou marketing.</h3>
+            <p>O avanço mais valioso para a construção está em interpretar dados da obra e sugerir próximos passos com contexto real.</p>
+            <a class="news-card__cta" href="#noticia-ia">Ler análise</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-wrap" aria-labelledby="radar-cta-title">
+      <div class="page-shell">
+        <div class="cta-panel" id="radar-cta">
+          <div>
+            <p class="section-kicker">Conectar leitura e execução</p>
+            <h2 id="radar-cta-title">Transforme informação em decisão de obra</h2>
+            <p>O Radar mostra o movimento. O Orceu ajuda sua construtora a responder com processo, tecnologia e gestão conectada ao dia a dia da operação.</p>
+          </div>
+
+          <div class="cta-actions">
+            <a class="btn btn-primary" href="/#contato">Falar com o time
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4"></path>
+              </svg>
+            </a>
+            <a class="btn btn-secondary" href="/#diagnostico">Iniciar diagnóstico</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <p class="footer-note">Orceu Radar. Conteúdo estático inicial para organizar notícias, sinais de mercado e tendências do setor.</p>
+
+  <script>
+    (() => {
+      const header = document.querySelector(".site-header");
+      const toggle = document.querySelector(".mobile-nav-toggle");
+      const nav = document.querySelector("#main-navigation");
+
+      if (!header || !toggle || !nav) return;
+
+      const getScrollTop = () => (
+        window.scrollY ||
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        0
+      );
+
+      const isMobileNav = () => window.innerWidth <= 860;
+
+      const syncHeaderState = () => {
+        header.classList.toggle("is-scrolled", getScrollTop() > 10);
+      };
+
+      const setMenuOpen = (isOpen) => {
+        header.classList.toggle("mobile-menu-open", isOpen);
+        nav.classList.toggle("is-open", isOpen);
+        if (isMobileNav()) {
+          nav.style.display = isOpen ? "grid" : "none";
+          nav.style.opacity = isOpen ? "1" : "0";
+          nav.style.visibility = isOpen ? "visible" : "hidden";
+          nav.style.pointerEvents = isOpen ? "auto" : "none";
+          nav.style.transform = isOpen ? "translateY(0) scale(1)" : "translateY(-8px) scale(0.98)";
+        } else {
+          nav.style.display = "";
+          nav.style.opacity = "";
+          nav.style.visibility = "";
+          nav.style.pointerEvents = "";
+          nav.style.transform = "";
+        }
+        toggle.setAttribute("aria-expanded", String(isOpen));
+      };
+
+      syncHeaderState();
+      window.addEventListener("scroll", syncHeaderState, { passive: true });
+      window.addEventListener("resize", () => {
+        syncHeaderState();
+        if (!isMobileNav()) {
+          setMenuOpen(false);
+        }
+      }, { passive: true });
+      window.addEventListener("load", syncHeaderState);
+
+      toggle.addEventListener("click", () => {
+        setMenuOpen(!header.classList.contains("mobile-menu-open"));
+      });
+
+      nav.addEventListener("click", (event) => {
+        const link = event.target.closest("a");
+        if (!link) return;
+        setMenuOpen(false);
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!header.contains(event.target)) {
+          setMenuOpen(false);
+        }
+      });
+
+      window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          setMenuOpen(false);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
