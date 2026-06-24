@@ -1,0 +1,844 @@
+<script>
+
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const arrows = Array.from(document.querySelectorAll(".slider-arrow"));
+    const slidesContainer = document.querySelector(".slides");
+    const colors = ["#2146AD", "#2146AD", "#10131F", "#08715F"];
+    const slideDurations = [18000, 12000, 12000, 12000];
+    let cur = 0;
+    let timer = setTimeout(next, slideDurations[cur]);
+
+    function go(i) {
+      cur = (i + slides.length) % slides.length;
+      slides.forEach((s, idx) => s.classList.toggle("is-active", idx === cur));
+      slidesContainer.style.background = colors[cur];
+      reset();
+    }
+
+    function next() { go(cur + 1); }
+
+    function reset() {
+      clearTimeout(timer);
+      timer = setTimeout(next, slideDurations[cur] || 12000);
+    }
+
+    arrows.forEach(a => a.addEventListener("click", () => { go(cur + +a.dataset.dir); }));
+
+    (() => {
+      const faqItems = Array.from(document.querySelectorAll(".faq-item"));
+      if (!faqItems.length) return;
+
+      const duration = 380;
+      const answerHeightBuffer = 96;
+
+      faqItems.forEach((item) => {
+        const question = item.querySelector(".faq-question");
+        const answer = item.querySelector(".faq-answer");
+        let closeTimer = null;
+
+        if (!question || !answer) return;
+
+        const measureAnswer = () => {
+          item.style.setProperty("--faq-answer-height", `${answer.scrollHeight + answerHeightBuffer}px`);
+        };
+
+        if (item.open) measureAnswer();
+
+        question.addEventListener("click", (event) => {
+          event.preventDefault();
+          window.clearTimeout(closeTimer);
+          measureAnswer();
+
+          if (item.open) {
+            item.classList.add("is-closing");
+            closeTimer = window.setTimeout(() => {
+              item.open = false;
+              item.classList.remove("is-closing");
+              measureAnswer();
+            }, duration);
+            return;
+          }
+
+          item.open = true;
+          item.classList.remove("is-closing");
+          requestAnimationFrame(measureAnswer);
+        });
+
+        window.addEventListener("resize", measureAnswer, { passive: true });
+      });
+    })();
+
+    const audienceCarousel = document.querySelector("[data-audience-carousel]");
+    if (audienceCarousel) {
+      const audienceCards = Array.from(audienceCarousel.querySelectorAll("[data-audience-card]"));
+      const audienceDots = Array.from(audienceCarousel.querySelectorAll("[data-audience-dot]"));
+      const audienceNav = Array.from(audienceCarousel.querySelectorAll("[data-audience-dir]"));
+      const audienceViewport = audienceCarousel.querySelector(".audience-viewport");
+      const audienceTrack = audienceCarousel.querySelector(".audience-track");
+      const AUDIENCE_INTERVAL = 3600;
+      let audienceCurrent = 0;
+      let audienceStartX = 0;
+      let audienceTimer = null;
+      let audienceAnimationTimer = null;
+
+      function getAudienceOffset(index) {
+        let offset = index - audienceCurrent;
+        if (offset > audienceCards.length / 2) offset -= audienceCards.length;
+        if (offset < -audienceCards.length / 2) offset += audienceCards.length;
+        return offset;
+      }
+
+      function setAudienceProfile(index) {
+        audienceCurrent = (index + audienceCards.length) % audienceCards.length;
+        clearTimeout(audienceAnimationTimer);
+        audienceCards.forEach((card, cardIndex) => {
+          const offset = getAudienceOffset(cardIndex);
+          const isActive = offset === 0;
+          card.classList.toggle("is-active", isActive);
+          card.classList.toggle("is-entering", isActive);
+          card.classList.toggle("is-before", !isActive && offset < 0);
+          card.classList.toggle("is-after", !isActive && offset > 0);
+          card.style.setProperty("--audience-offset", String(offset));
+          card.style.zIndex = isActive ? "3" : "1";
+          card.style.boxShadow = isActive ? "0 34px 90px rgba(3, 12, 50, 0.26)" : "";
+        });
+        audienceAnimationTimer = setTimeout(() => {
+          audienceCards.forEach((card) => card.classList.remove("is-entering"));
+        }, 840);
+        audienceDots.forEach((dot, dotIndex) => {
+          dot.classList.toggle("is-active", dotIndex === audienceCurrent);
+        });
+        requestAnimationFrame(centerAudienceProfile);
+      }
+
+      function centerAudienceProfile() {
+        if (!audienceViewport || !audienceTrack) return;
+        audienceTrack.style.transform = "";
+      }
+
+      function startAudienceAutoplay() {
+        clearInterval(audienceTimer);
+        audienceTimer = setInterval(() => {
+          setAudienceProfile(audienceCurrent + 1);
+        }, AUDIENCE_INTERVAL);
+      }
+
+      audienceNav.forEach(button => {
+        button.addEventListener("click", () => {
+          setAudienceProfile(audienceCurrent + Number(button.dataset.audienceDir));
+          startAudienceAutoplay();
+        });
+      });
+
+      audienceDots.forEach(dot => {
+        dot.addEventListener("click", () => {
+          setAudienceProfile(Number(dot.dataset.audienceDot));
+          startAudienceAutoplay();
+        });
+      });
+
+      audienceCards.forEach(card => {
+        card.addEventListener("click", () => {
+          setAudienceProfile(Number(card.dataset.audienceCard));
+          startAudienceAutoplay();
+        });
+      });
+
+      audienceCarousel.addEventListener("pointerdown", event => {
+        audienceStartX = event.clientX;
+      });
+
+      audienceCarousel.addEventListener("pointerup", event => {
+        const delta = event.clientX - audienceStartX;
+        if (Math.abs(delta) < 42) return;
+        setAudienceProfile(audienceCurrent + (delta < 0 ? 1 : -1));
+        startAudienceAutoplay();
+      });
+
+      window.addEventListener("resize", centerAudienceProfile, { passive: true });
+      setAudienceProfile(audienceCurrent);
+      startAudienceAutoplay();
+    }
+
+    (function () {
+      const root = document.querySelector(".pf-profiles");
+      if (!root) return;
+
+      const deck = root.querySelector(".pf-deck");
+      const cards = Array.from(root.querySelectorAll(".pf-card"));
+      const dotsBox = root.querySelector(".pf-dots");
+      const prevBtn = root.querySelector(".pf-arrow--prev");
+      const nextBtn = root.querySelector(".pf-arrow--next");
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const total = cards.length;
+      const PROFILE_TOTAL_MS = 4500;
+      const PROFILE_TRANSITION_MS = 500;
+      const PROFILE_READING_MS = PROFILE_TOTAL_MS - PROFILE_TRANSITION_MS;
+
+      let active = 0;
+      let timer = null;
+      let transitionTimer = null;
+      let leaveTimer = null;
+      let startX = null;
+
+      if (!deck || !cards.length || !dotsBox || !prevBtn || !nextBtn) return;
+
+      cards.forEach((_, index) => {
+        const dot = document.createElement("button");
+        dot.className = "pf-dot";
+        dot.type = "button";
+        dot.setAttribute("aria-label", "Ir para o perfil " + (index + 1));
+        dot.addEventListener("click", () => {
+          go(index);
+          restart();
+        });
+        dotsBox.appendChild(dot);
+      });
+
+      const dots = Array.from(dotsBox.children);
+
+      function sizeDeck() {
+        const copyEl = root.querySelector(".pf-copy");
+        const stackOffsetY = window.innerWidth <= 640 ? 28 : window.innerWidth <= 920 ? 36 : 44;
+        cards.forEach((card) => {
+          card.style.height = "auto";
+        });
+        const leftHeight = copyEl ? copyEl.offsetHeight : 0;
+        let maxCardNaturalHeight = 0;
+        cards.forEach((card) => {
+          maxCardNaturalHeight = Math.max(maxCardNaturalHeight, card.scrollHeight);
+        });
+        const finalHeight = Math.max(leftHeight, maxCardNaturalHeight);
+        cards.forEach((card) => {
+          card.style.height = finalHeight + "px";
+        });
+        deck.style.height = finalHeight + stackOffsetY + "px";
+      }
+
+      function render() {
+        // Toggle featured-active class on deck for button styling
+        if (deck && cards.length) {
+          const activeCard = cards[active];
+          const isFeatured = activeCard && activeCard.classList.contains("pf-card--featured");
+          deck.classList.toggle("has-featured-active", isFeatured);
+        }
+
+        cards.forEach((card, index) => {
+          const position = (index - active + total) % total;
+          const isActive = position === 0;
+          const isDepthOne = position === 1;
+          const isDepthTwo = position === 2;
+          const isPrevious = position === total - 1;
+
+          card.classList.toggle("is-active", isActive);
+          card.classList.toggle("is-depth", isDepthOne || isDepthTwo);
+          card.classList.toggle("is-hidden", !isActive && !isDepthOne && !isDepthTwo);
+          card.classList.remove("is-leaving");
+
+          card.style.pointerEvents = isActive ? "auto" : "none";
+
+          if (isActive) {
+            card.style.setProperty("--pf-x", "0px");
+            card.style.setProperty("--pf-y", "0px");
+            card.style.setProperty("--pf-scale", "1");
+            card.style.setProperty("--pf-rotate", "0deg");
+            card.style.setProperty("--pf-opacity", "1");
+            card.style.setProperty("--pf-blur", "0px");
+            card.style.zIndex = String(total + 4);
+          } else if (isDepthOne) {
+            card.style.setProperty("--pf-x", "24px");
+            card.style.setProperty("--pf-y", "18px");
+            card.style.setProperty("--pf-scale", ".968");
+            card.style.setProperty("--pf-rotate", ".35deg");
+            card.style.setProperty("--pf-opacity", ".84");
+            card.style.setProperty("--pf-blur", "0px");
+            card.style.zIndex = String(total + 2);
+          } else if (isDepthTwo) {
+            card.style.setProperty("--pf-x", "46px");
+            card.style.setProperty("--pf-y", "36px");
+            card.style.setProperty("--pf-scale", ".94");
+            card.style.setProperty("--pf-rotate", ".7deg");
+            card.style.setProperty("--pf-opacity", ".58");
+            card.style.setProperty("--pf-blur", ".2px");
+            card.style.zIndex = String(total + 1);
+          } else {
+            card.style.setProperty("--pf-x", isPrevious ? "-68px" : "64px");
+            card.style.setProperty("--pf-y", isPrevious ? "-22px" : "54px");
+            card.style.setProperty("--pf-scale", isPrevious ? ".948" : ".91");
+            card.style.setProperty("--pf-rotate", isPrevious ? "-2deg" : "1deg");
+            card.style.setProperty("--pf-opacity", "0");
+            card.style.setProperty("--pf-blur", "2px");
+            card.style.zIndex = isPrevious ? String(total + 3) : "1";
+          }
+        });
+
+        dots.forEach((dot, index) => {
+          dot.setAttribute("aria-current", index === active ? "true" : "false");
+        });
+
+      }
+
+      function markLeaving(index, direction = 1) {
+        const outgoing = cards[index];
+        if (!outgoing || reducedMotion) return;
+        clearTimeout(leaveTimer);
+        outgoing.style.setProperty("--pf-leave-x", direction > 0 ? "-72px" : "72px");
+        outgoing.style.setProperty("--pf-leave-rotate", direction > 0 ? "-2deg" : "2deg");
+        requestAnimationFrame(() => outgoing.classList.add("is-leaving"));
+      }
+
+      function clearLeaving(index) {
+        const outgoing = cards[index];
+        if (outgoing) outgoing.classList.remove("is-leaving");
+      }
+
+      function go(index, options = {}) {
+        const previous = active;
+        const nextIndex = (index + total) % total;
+        if (nextIndex === active) return;
+
+        const step = (nextIndex - active + total) % total;
+        const direction = step === 1 || step < total / 2 ? 1 : -1;
+        active = nextIndex;
+        render();
+
+        const shouldAnimateOutgoing = options.animateOutgoing !== false;
+        const outgoing = cards[previous];
+        if (outgoing && !reducedMotion && shouldAnimateOutgoing) {
+          clearTimeout(leaveTimer);
+          outgoing.style.setProperty("--pf-leave-x", direction > 0 ? "-72px" : "72px");
+          outgoing.style.setProperty("--pf-leave-rotate", direction > 0 ? "-2deg" : "2deg");
+          requestAnimationFrame(() => outgoing.classList.add("is-leaving"));
+          leaveTimer = setTimeout(() => {
+            outgoing.classList.remove("is-leaving");
+          }, PROFILE_TRANSITION_MS);
+        }
+      }
+
+      function next() {
+        go(active + 1);
+      }
+
+      function prev() {
+        go(active - 1);
+      }
+
+      function stop() {
+        clearTimeout(timer);
+        clearTimeout(transitionTimer);
+      }
+
+      function start() {
+        if (reducedMotion) return;
+        stop();
+        timer = setTimeout(() => {
+          const leavingIndex = active;
+          markLeaving(leavingIndex, 1);
+          transitionTimer = setTimeout(() => {
+            clearLeaving(leavingIndex);
+            go(leavingIndex + 1, { animateOutgoing: false });
+            start();
+          }, PROFILE_TRANSITION_MS);
+        }, PROFILE_READING_MS);
+      }
+
+      function restart() {
+        stop();
+        start();
+      }
+
+      nextBtn.addEventListener("click", () => {
+        next();
+        restart();
+      });
+
+      prevBtn.addEventListener("click", () => {
+        prev();
+        restart();
+      });
+
+      root.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowRight") {
+          next();
+          restart();
+        }
+        if (event.key === "ArrowLeft") {
+          prev();
+          restart();
+        }
+      });
+
+      deck.addEventListener("pointerdown", (event) => {
+        startX = event.clientX;
+        stop();
+      });
+
+      deck.addEventListener("pointerup", (event) => {
+        if (startX === null) return;
+        const delta = event.clientX - startX;
+        if (delta < -40) next();
+        if (delta > 40) prev();
+        startX = null;
+        restart();
+      });
+
+      deck.addEventListener("pointercancel", () => {
+        startX = null;
+        restart();
+      });
+
+      window.addEventListener("resize", sizeDeck);
+
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(sizeDeck);
+      }
+
+      sizeDeck();
+      render();
+      start();
+    })();
+
+    const heroBottom = document.querySelector(".hero-bottom");
+    const hero = document.querySelector(".hero");
+    window.addEventListener("scroll", () => {
+      const rect = hero.getBoundingClientRect();
+      if (rect.bottom < 0) return;
+      const t = Math.max(0, window.scrollY / hero.offsetHeight);
+      heroBottom.style.transform = "translateY(" + (-t * 40) + "px)";
+    }, { passive: true });
+
+    const resourceRevealItems = document.querySelectorAll(".resource-reveal");
+    resourceRevealItems.forEach((item, index) => {
+      item.style.setProperty("--reveal-delay", (index % 4) * 60 + "ms");
+    });
+
+    if ("IntersectionObserver" in window) {
+      const resourcesObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      }, { threshold: 0.16 });
+
+      resourceRevealItems.forEach(item => resourcesObserver.observe(item));
+    } else {
+      resourceRevealItems.forEach(item => item.classList.add("is-visible"));
+    }
+
+    const resourcesJourney = document.querySelector("[data-resources-journey]");
+    if (resourcesJourney) {
+      const journeyButtons = Array.from(resourcesJourney.querySelectorAll("[data-stage-target]"));
+      const journeyPanels = Array.from(document.querySelectorAll("[data-stage-panel]"));
+
+      function setJourneyStage(stage) {
+        journeyButtons.forEach((button) => {
+          const isActive = button.dataset.stageTarget === stage;
+          button.classList.toggle("is-active", isActive);
+          button.setAttribute("aria-pressed", String(isActive));
+        });
+
+        journeyPanels.forEach((panel) => {
+          const isActive = panel.dataset.stagePanel === stage;
+          panel.classList.toggle("is-active", isActive);
+        });
+
+        const activePanel = journeyPanels.find((panel) => panel.dataset.stagePanel === stage);
+        activePanel?.querySelectorAll(".resource-reveal").forEach((item) => {
+          item.classList.add("is-visible");
+        });
+      }
+
+      journeyButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          setJourneyStage(button.dataset.stageTarget);
+        });
+      });
+
+      setJourneyStage(journeyButtons.find((button) => button.classList.contains("is-active"))?.dataset.stageTarget || "antes");
+    }
+
+    const bonusTimer = document.querySelector("[data-bonus-timer]");
+    if (bonusTimer) {
+      const bonusTimerValue = bonusTimer.querySelector("[data-bonus-timer-value]");
+      const bonusTimerLabel = bonusTimer.querySelector("[data-bonus-timer-label]");
+      const bonusTimerDuration = Number(bonusTimer.dataset.duration || 900000);
+      const bonusTimerCookie = "orceu_bonus_timer_expires_at";
+      let bonusTimerDeadline = null;
+      let bonusTimerInterval = null;
+
+      function getCookie(name) {
+        const cookie = document.cookie
+          .split("; ")
+          .find((item) => item.startsWith(name + "="));
+
+        return cookie ? decodeURIComponent(cookie.split("=").slice(1).join("=")) : null;
+      }
+
+      function setCookie(name, value, maxAgeSeconds) {
+        document.cookie = [
+          `${name}=${encodeURIComponent(value)}`,
+          "path=/",
+          `max-age=${maxAgeSeconds}`,
+          "SameSite=Lax"
+        ].join("; ");
+      }
+
+      function clearCookie(name) {
+        document.cookie = `${name}=; path=/; max-age=0; SameSite=Lax`;
+      }
+
+      function getTimerDeadline() {
+        const storedDeadline = Number(getCookie(bonusTimerCookie));
+        const now = Date.now();
+
+        if (Number.isFinite(storedDeadline) && storedDeadline > now) {
+          return storedDeadline;
+        }
+
+        const nextDeadline = now + bonusTimerDuration;
+        setCookie(bonusTimerCookie, String(nextDeadline), Math.ceil(bonusTimerDuration / 1000));
+        return nextDeadline;
+      }
+
+      function formatRemaining(milliseconds) {
+        const totalSeconds = Math.max(0, Math.ceil(milliseconds / 1000));
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+
+        return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+      }
+
+      function renderBonusTimer() {
+        const remaining = Math.max(0, bonusTimerDeadline - Date.now());
+        bonusTimerValue.textContent = formatRemaining(remaining);
+
+        if (remaining > 0) {
+          bonusTimer.classList.remove("is-ended");
+          bonusTimerLabel.textContent = "Oferta ativa";
+          return;
+        }
+
+        bonusTimer.classList.add("is-ended");
+        bonusTimerLabel.textContent = "Tempo encerrado";
+        clearInterval(bonusTimerInterval);
+        clearCookie(bonusTimerCookie);
+      }
+
+      bonusTimerDeadline = getTimerDeadline();
+      renderBonusTimer();
+      bonusTimerInterval = window.setInterval(renderBonusTimer, 1000);
+    }
+
+    const perguntas = [
+      {
+        id: "q1",
+        numero: "Pergunta 1 de 7",
+        titulo: "Quando você viaja por uma semana, o que acontece com a obra?",
+        opcoes: [
+          ["A", "Para. Tudo trava esperando minha decisão."],
+          ["B", "Anda devagar. Vai acumulando coisa pra quando eu voltar."],
+          ["C", "Roda no básico. Decisões grandes esperam, o resto continua."],
+          ["D", "Continua normal. A equipe sabe o que fazer sem mim."]
+        ]
+      },
+      {
+        id: "q2",
+        numero: "Pergunta 2 de 7",
+        titulo: "No fim de cada obra, o custo real bate com o que foi orçado?",
+        opcoes: [
+          ["A", "Sempre estoura. Já não acredito mais em orçamento."],
+          ["B", "Quase sempre estoura, mas a gente vai ajustando no caminho."],
+          ["C", "Bate na maioria das vezes, com variação pequena."],
+          ["D", "Bate com precisão. Quando varia, sei exatamente por quê."]
+        ]
+      },
+      {
+        id: "q3",
+        numero: "Pergunta 3 de 7",
+        titulo: "Quando um problema novo aparece no canteiro, o que sua equipe faz primeiro?",
+        opcoes: [
+          ["A", "Me liga imediatamente. Não decide nada sozinha."],
+          ["B", "Resolve o que dá. Pra coisa maior, espera eu chegar."],
+          ["C", "Resolve dentro de um padrão que já combinamos."],
+          ["D", "Resolve com autonomia. Eu só fico sabendo no relatório."]
+        ]
+      },
+      {
+        id: "q4",
+        numero: "Pergunta 4 de 7",
+        titulo: "Como projeto, orçamento e execução conversam entre si na sua operação?",
+        opcoes: [
+          ["A", "Não conversam. Cada um faz a parte dele e a obra vai descobrindo."],
+          ["B", "Conversam quando dá problema. Aí a gente alinha."],
+          ["C", "Conversam em reuniões, com planilhas separadas."],
+          ["D", "Tudo conectado num sistema único, em tempo real."]
+        ]
+      },
+      {
+        id: "q5",
+        numero: "Pergunta 5 de 7",
+        titulo: "Qual dessas frases mais combina com como você se sente hoje?",
+        opcoes: [
+          ["A", "Tô apagando incêndio o tempo todo. Não sobra tempo pra pensar a empresa."],
+          ["B", "Cresço, mas com a sensação de que tô andando no fio da navalha."],
+          ["C", "Tô organizado, mas sei que tem coisa que precisa evoluir."],
+          ["D", "Tô confortável. A operação roda e eu penso no próximo nível."]
+        ]
+      },
+      {
+        id: "q6",
+        numero: "Pergunta 6 de 7",
+        titulo: "Se você precisasse vender sua construtora amanhã, ela valeria o mesmo sem você dentro dela?",
+        opcoes: [
+          ["A", "Não. Sem mim, ela não vale quase nada."],
+          ["B", "Valeria menos. Boa parte do valor é minha presença."],
+          ["C", "Valeria parecido. A operação já tem identidade própria."],
+          ["D", "Valeria mais, porque tem método, processo e equipe."]
+        ]
+      },
+      {
+        id: "q7",
+        numero: "Pergunta 7 de 7",
+        titulo: "Pra terminar, qual dessas frases mais combina com o que mais trava sua construtora hoje?",
+        copy: "Essa resposta define o tópico dominante do diagnóstico.",
+        opcoes: [
+          ["A", "Falta de clientes qualificados / dificuldade pra vender mais"],
+          ["B", "Empresa muito dependente de mim"],
+          ["C", "Falta de processos / equipe desalinhada / obras atrasadas"],
+          ["D", "Margem baixa / falta de previsibilidade / dificuldade pra escalar"],
+          ["E", "Outro"]
+        ]
+      }
+    ];
+
+    const respostas = {
+      q1: null, q2: null, q3: null, q4: null, q5: null, q6: null, q7: null,
+      outroTexto: null,
+      nome: null,
+      email: null,
+      whatsapp: null
+    };
+
+    const TOPICO_MAP = {
+      A: "clientes_vendas",
+      B: "dependencia",
+      C: "processos_equipe",
+      D: "margem_escala",
+      E: "outro"
+    };
+
+    const PONTOS = { A: 0, B: 1, C: 2, D: 3 };
+    const RESULT_COLORS = { vermelho: "#cd3d43", amarelo: "#d4a817", verde: "#11885d" };
+
+    const RESULTADOS = {
+      obra_caos_clientes_vendas: {
+        cor: "vermelho",
+        headline: "Sua obra está em Obra Caos.",
+        subheadline: "Seu maior nó: falta de clientes qualificados.",
+        texto: "Você sente que precisa correr atrás de cada obra e, quando ela vem, raramente é o cliente ideal. O mercado ainda enxerga uma operação sem autoridade visível, e isso afasta o cliente certo.",
+        soco: "Construtora em Obra Caos atrai cliente que pechincha. Construtora em Obra Próspera atrai cliente que escolhe pelo método.",
+        pdf: "Como construtoras com método atraem o cliente certo",
+        beneficio: "Benefício especial no software Orceu",
+        obs: null,
+        ctaPrincipal: "Começar grátis no Orceu",
+        ctaSecundario: "Ver como o método funciona"
+      },
+      obra_caos_dependencia: {
+        cor: "vermelho",
+        headline: "Sua obra está em Obra Caos.",
+        subheadline: "Seu maior nó: empresa muito dependente de você.",
+        texto: "Suas respostas mostram que decisões pequenas e grandes ainda passam pela sua cabeça, e a equipe trava sem você por perto. O ponto central é a falta de método que dê autonomia pra operação seguir com previsibilidade.",
+        soco: "A construção civil chama isso de cargo. Você não construiu uma empresa. Você construiu uma posição que precisa de você todo dia.",
+        pdf: "Como sair do papel de Apagador de Incêndio",
+        beneficio: "Benefício especial no software Orceu",
+        obs: null,
+        ctaPrincipal: "Começar grátis no Orceu",
+        ctaSecundario: "Ver como o método funciona"
+      },
+      obra_caos_processos_equipe: {
+        cor: "vermelho",
+        headline: "Sua obra está em Obra Caos.",
+        subheadline: "Seu maior nó: falta de processos e equipe alinhada.",
+        texto: "Sua obra atrasa, desorganiza e improvisa porque não existe um método sustentando a operação. A equipe não está errada, está sem direção clara. E enquanto não tiver, cada nova obra vai recomeçar do zero o aprendizado da anterior.",
+        soco: "Construtora sem processo não cresce. Engorda. E na obra, engordar custa caro.",
+        pdf: "Os 4 processos básicos que toda obra deveria ter",
+        beneficio: "Benefício especial no software Orceu",
+        obs: null,
+        ctaPrincipal: "Começar grátis no Orceu",
+        ctaSecundario: "Ver como o método funciona"
+      },
+      obra_caos_margem_escala: {
+        cor: "vermelho",
+        headline: "Sua obra está em Obra Caos.",
+        subheadline: "Seu maior nó: margem baixa e dificuldade de escalar.",
+        texto: "Você trabalha muito, entrega obra, mas no fim do mês o resultado financeiro não acompanha o esforço. Na maior parte das vezes, o problema está numa operação que perde dinheiro sem você ver: atrasos pequenos, retrabalho disfarçado, compra no susto.",
+        soco: "Escalar com essa estrutura não é crescer. É amplificar o caos.",
+        pdf: "3 fontes de perda de margem invisível na obra",
+        beneficio: "Benefício especial no software Orceu",
+        obs: null,
+        ctaPrincipal: "Começar grátis no Orceu",
+        ctaSecundario: "Ver como o método funciona"
+      },
+      obra_caos_outro: {
+        cor: "vermelho",
+        headline: "Sua obra está em Obra Caos.",
+        subheadline: "A boa notícia: tem caminho.",
+        texto: "Suas respostas mostram que a operação ainda depende muito de você, opera no improviso e custa caro por falhas que poderiam ser previsíveis. A boa notícia é que isso tem caminho.",
+        soco: "Isso tem caminho. E começa pelo método, não pelo esforço.",
+        pdf: "Os 3 primeiros passos pra sair da Obra Caos",
+        beneficio: "Benefício especial no software Orceu",
+        obs: "Nossa equipe vai entrar em contato pra conversar sobre sua operação.",
+        ctaPrincipal: "Começar grátis no Orceu",
+        ctaSecundario: "Ver como o método funciona"
+      },
+      obra_transicao_clientes_vendas: {
+        cor: "amarelo",
+        headline: "Sua obra está em Transição.",
+        subheadline: "Seu próximo nó: atrair clientes melhores.",
+        texto: "Sua operação já tem maturidade. Equipe funciona, processos existem, obra entrega. Mas o tipo de cliente que chega ainda não acompanha o nível da sua construtora. Esse é o estágio em que sua construtora para de competir por preço e começa a ser escolhida pelo método.",
+        soco: null,
+        pdf: "Como construtoras maduras posicionam autoridade",
+        beneficio: "Benefício especial no software Orceu",
+        obs: null,
+        ctaPrincipal: "Começar grátis no Orceu",
+        ctaSecundario: "Quero saber sobre o Orceu Empresarial"
+      },
+      obra_transicao_dependencia: {
+        cor: "amarelo",
+        headline: "Sua obra está em Transição.",
+        subheadline: "Seu próximo nó: tirar você do gargalo da operação.",
+        texto: "Sua construtora já roda, mas você continua sendo a peça-chave de toda decisão importante. Esse é o estágio mais perigoso, porque a operação parece boa, mas não é sustentável se você se afastar.",
+        soco: "O salto da Transição pra Obra Próspera é exatamente esse: deixar de ser indispensável.",
+        pdf: "Como deixar de ser indispensável na própria empresa",
+        beneficio: "Benefício especial no software Orceu",
+        obs: null,
+        ctaPrincipal: "Começar grátis no Orceu",
+        ctaSecundario: "Quero saber sobre o Orceu Empresarial"
+      },
+      obra_transicao_processos_equipe: {
+        cor: "amarelo",
+        headline: "Sua obra está em Transição.",
+        subheadline: "Seu próximo nó: estruturar processos que escalam.",
+        texto: "Você tem processo, mas ele ainda é frágil quando a obra cresce ou complica. Equipe alinhada na obra fácil, desalinhada na obra difícil. Esse é o sinal de que o método precisa virar sistema, não combinação informal.",
+        soco: null,
+        pdf: "Do processo informal ao sistema que escala",
+        beneficio: "Benefício especial no software Orceu",
+        obs: null,
+        ctaPrincipal: "Começar grátis no Orceu",
+        ctaSecundario: "Quero saber sobre o Orceu Empresarial"
+      },
+      obra_transicao_margem_escala: {
+        cor: "amarelo",
+        headline: "Sua obra está em Transição.",
+        subheadline: "Seu próximo nó: margem previsível e crescimento sustentável.",
+        texto: "Sua operação já funciona. Mas a margem ainda oscila e o crescimento vem com solavanco. Quando cresce, aperta a operação. Quando segura, sente que está estagnando. Esse é o estágio em que método financeiro deixa de ser luxo e vira condição.",
+        soco: null,
+        pdf: "Como manter margem em construtora que está crescendo",
+        beneficio: "Benefício especial no software Orceu",
+        obs: null,
+        ctaPrincipal: "Começar grátis no Orceu",
+        ctaSecundario: "Quero saber sobre o Orceu Empresarial"
+      },
+      obra_transicao_outro: {
+        cor: "amarelo",
+        headline: "Sua obra está em Transição.",
+        subheadline: "O estágio em que a maioria estaciona.",
+        texto: "Você saiu do caos puro, mas ainda não chegou na operação que se sustenta sem você. Esse é o estágio em que a maioria estaciona, porque parece bom o suficiente pra não mudar.",
+        soco: null,
+        pdf: "Como dar o salto da Transição pra Obra Próspera",
+        beneficio: "Benefício especial no software Orceu",
+        obs: "Nossa equipe vai entrar em contato pra conversar sobre sua operação.",
+        ctaPrincipal: "Começar grátis no Orceu",
+        ctaSecundario: "Quero saber sobre o Orceu Empresarial"
+      },
+      obra_prospera_clientes_vendas: {
+        cor: "verde",
+        headline: "Sua obra está na rota da Obra Próspera.",
+        subheadline: "Seu próximo nó: aquisição de clientes diferenciados.",
+        texto: "Você construiu o que poucos constroem: uma operação que roda com método, equipe autônoma e previsibilidade. Mas chegou no ponto em que o gargalo deixou de ser interno e virou comercial. Esse é o problema dos empresários que já saíram do canteiro. E ele não se resolve sozinho.",
+        soco: null,
+        pdf: "Como obras prósperas atraem clientes diferenciados",
+        beneficio: "Acesso prioritário ao Orceu Empresarial",
+        obs: null,
+        ctaPrincipal: "Quero o Orceu Empresarial",
+        ctaSecundario: "Falar com a equipe Orceu"
+      },
+      obra_prospera_dependencia: {
+        cor: "verde",
+        headline: "Sua obra está na rota da Obra Próspera.",
+        subheadline: "Seu próximo nó: blindar a operação contra recaída.",
+        texto: "Sua construtora opera bem sem você no dia a dia, mas há um ponto cego: dependências ocultas que só aparecem em crise. Esse é o estágio em que mentor externo vale mais que software interno, porque o que falta agora é leitura que você não consegue fazer de dentro.",
+        soco: null,
+        pdf: "Como sustentar autonomia operacional no longo prazo",
+        beneficio: "Acesso prioritário ao Orceu Empresarial",
+        obs: null,
+        ctaPrincipal: "Quero o Orceu Empresarial",
+        ctaSecundario: "Falar com a equipe Orceu"
+      },
+      obra_prospera_processos_equipe: {
+        cor: "verde",
+        headline: "Sua obra está na rota da Obra Próspera.",
+        subheadline: "Seu próximo nó: cultura que segura o método.",
+        texto: "Você tem processos sólidos. O que separa Obra Próspera estável de Obra Próspera que recai é cultura: o time entende o porquê do método, ou só executa? Esse é o estágio em que a empresa para de depender de processo e começa a depender de gente que acredita no processo.",
+        soco: null,
+        pdf: "Cultura de método em construtora madura",
+        beneficio: "Acesso prioritário ao Orceu Empresarial",
+        obs: null,
+        ctaPrincipal: "Quero o Orceu Empresarial",
+        ctaSecundario: "Falar com a equipe Orceu"
+      },
+      obra_prospera_margem_escala: {
+        cor: "verde",
+        headline: "Sua obra está na rota da Obra Próspera.",
+        subheadline: "Seu próximo nó: escala com manutenção de margem.",
+        texto: "Sua construtora já provou que entrega com método. O próximo desafio é o mais difícil do setor: crescer sem perder o que construiu. Escala em construção civil quebra mais empresa que recessão. Esse é o estágio em que cercar-se de quem já fez essa travessia vale mais que qualquer ferramenta.",
+        soco: null,
+        pdf: "Escala sem recaída: como crescer mantendo o método",
+        beneficio: "Acesso prioritário ao Orceu Empresarial",
+        obs: null,
+        ctaPrincipal: "Quero o Orceu Empresarial",
+        ctaSecundario: "Falar com a equipe Orceu"
+      },
+      obra_prospera_outro: {
+        cor: "verde",
+        headline: "Sua obra está na rota da Obra Próspera.",
+        subheadline: "Um lugar raro, e perigoso de manter.",
+        texto: "Você está num lugar raro. O que separa empresários nesse estágio é se vão sustentar o nível com gente do mesmo jogo ao redor, ou se vão estagnar tentando crescer sozinhos.",
+        soco: null,
+        pdf: "Como sustentar e escalar Obra Próspera",
+        beneficio: "Acesso prioritário ao Orceu Empresarial",
+        obs: "Nossa equipe vai entrar em contato pra conversar sobre sua operação.",
+        ctaPrincipal: "Quero o Orceu Empresarial",
+        ctaSecundario: "Falar com a equipe Orceu"
+      }
+    };
+
+    (() => {
+      const diagnostic = document.querySelector(".diagnostic");
+      if (!diagnostic || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      let ticking = false;
+
+      const updateDiagnosticParallax = () => {
+        const rect = diagnostic.getBoundingClientRect();
+        const viewport = window.innerHeight || document.documentElement.clientHeight;
+        const progress = ((rect.top + rect.height / 2) - viewport / 2) / viewport;
+        const limited = Math.max(-1, Math.min(1, progress));
+
+        diagnostic.style.setProperty("--diagnostic-parallax-y", `${(limited * -28).toFixed(2)}px`);
+        diagnostic.style.setProperty("--diagnostic-parallax-x", `${(limited * 18).toFixed(2)}px`);
+        ticking = false;
+      };
+
+      const requestDiagnosticParallax = () => {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(updateDiagnosticParallax);
+      };
+
+      updateDiagnosticParallax();
+      window.addEventListener("scroll", requestDiagnosticParallax, { passive: true });
+      window.addEventListener("resize", requestDiagnosticParallax, { passive: true });
+    })();
+</script>

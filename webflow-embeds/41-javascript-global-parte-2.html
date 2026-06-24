@@ -1,0 +1,569 @@
+<script>
+const quizModal = document.querySelector("#diagnostic-modal");
+    const openDiagnostic = document.querySelector("#open-diagnostic");
+    const quizContent = document.querySelector("#quiz-content");
+    const quizBack = document.querySelector("#quiz-back");
+    const quizClose = document.querySelector("#quiz-close");
+    const quizStepsIndicator = document.querySelector("#quiz-steps-indicator");
+    const quizDots = document.querySelectorAll(".quiz-dot");
+    const quizConfirm = document.querySelector("#quiz-confirm");
+    const quizKeepGoing = document.querySelector("#quiz-keep-going");
+    const quizExit = document.querySelector("#quiz-exit");
+    const quizStatus = document.querySelector("#quiz-status");
+    const stepProgress = {
+      welcome: 4, q1: 14, q2: 26, q3: 38, q4: 50, q5: 62, q6: 74, q7: 84,
+      outro: 90, contact: 94, loading: 98, result: 100
+    };
+    let currentStep = "welcome";
+    let historyStack = [];
+    let finalResultado = null;
+    let lastFocusedElement = null;
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function calcularResultado(dados) {
+      const scoreTotal = ["q1", "q2", "q3", "q4", "q5", "q6"]
+        .reduce((soma, key) => soma + PONTOS[dados[key]], 0);
+      let faixa;
+      if (scoreTotal <= 6) faixa = "obra_caos";
+      else if (scoreTotal <= 13) faixa = "obra_transicao";
+      else faixa = "obra_prospera";
+      const topico = TOPICO_MAP[dados.q7];
+      const chaveResultado = faixa + "_" + topico;
+      return {
+        scoreTotal,
+        faixa,
+        topico,
+        chaveResultado,
+        resultado: RESULTADOS[chaveResultado]
+      };
+    }
+
+    async function salvarLead(dados, resultado) {
+      try {
+        const response = await fetch("/api/leads", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            nome: dados.nome,
+            email: dados.email,
+            whatsapp: dados.whatsapp,
+            respostas: {
+              q1: dados.q1,
+              q2: dados.q2,
+              q3: dados.q3,
+              q4: dados.q4,
+              q5: dados.q5,
+              q6: dados.q6,
+              q7: dados.q7,
+              outroTexto: dados.outroTexto
+            },
+            diagnostico: {
+              scoreTotal: resultado.scoreTotal,
+              faixa: resultado.faixa,
+              topico: resultado.topico,
+              chave: resultado.chaveResultado
+            },
+            timestamp: new Date().toISOString()
+          })
+        });
+        if (!response.ok) throw new Error("Status " + response.status);
+      } catch (error) {
+        console.warn("Lead não enviado. Verifique o endpoint /api/leads.", error);
+      }
+    }
+
+    function resetQuiz() {
+      Object.keys(respostas).forEach((key) => { respostas[key] = null; });
+      currentStep = "welcome";
+      historyStack = [];
+      finalResultado = null;
+      hideExitConfirm();
+      renderStep(false);
+    }
+
+    function openQuiz() {
+      lastFocusedElement = document.activeElement;
+      resetQuiz();
+      quizModal.classList.add("is-open");
+      quizModal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("quiz-lock");
+      setTimeout(() => focusFirstAction(), 50);
+    }
+
+    function closeQuiz() {
+      quizModal.classList.remove("is-open");
+      quizModal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("quiz-lock");
+      hideExitConfirm();
+      if (lastFocusedElement) lastFocusedElement.focus();
+    }
+
+    function requestClose() {
+      if (currentStep === "welcome" || currentStep === "result") {
+        closeQuiz();
+        return;
+      }
+      showExitConfirm();
+    }
+
+    function showExitConfirm() {
+      quizConfirm.classList.add("is-visible");
+      quizConfirm.setAttribute("aria-hidden", "false");
+      quizKeepGoing.focus();
+    }
+
+    function hideExitConfirm() {
+      quizConfirm.classList.remove("is-visible");
+      quizConfirm.setAttribute("aria-hidden", "true");
+    }
+
+    function focusFirstAction() {
+      const focusable = quizContent.querySelector("button, input, textarea, a");
+      if (focusable) focusable.focus();
+    }
+
+    function setStep(step, shouldPush = true) {
+      if (shouldPush && currentStep !== step) historyStack.push(currentStep);
+      currentStep = step;
+      quizContent.classList.add("is-changing");
+      setTimeout(() => renderStep(), 120);
+    }
+
+    function goBack() {
+      if (!historyStack.length || currentStep === "loading") return;
+      currentStep = historyStack.pop();
+      renderStep();
+    }
+
+    function renderStep(animateDone = true) {
+      // Update dot indicator
+      const qMatch = currentStep.match(/^q(\d+)$/);
+      const activeQ = qMatch ? parseInt(qMatch[1]) : 0;
+      const showDots = activeQ > 0;
+      quizStepsIndicator.hidden = !showDots;
+      if (showDots) {
+        quizDots.forEach(dot => {
+          const n = parseInt(dot.dataset.dot);
+          dot.classList.toggle("is-active", n === activeQ);
+          dot.classList.toggle("is-done", n < activeQ);
+        });
+      }
+      quizBack.hidden = currentStep === "welcome" || currentStep === "loading";
+
+      if (currentStep === "welcome") renderWelcome();
+      else if (currentStep.startsWith("q")) renderQuestion(currentStep);
+      else if (currentStep === "outro") renderOutro();
+      else if (currentStep === "contact") renderContact();
+      else if (currentStep === "loading") renderLoading();
+      else if (currentStep === "result") renderResult();
+
+      quizStatus.textContent = currentStep === "result" ? "Diagnóstico pronto" : "Tela " + currentStep;
+      if (animateDone) {
+        requestAnimationFrame(() => {
+          quizContent.classList.remove("is-changing");
+          focusFirstAction();
+        });
+      }
+    }
+
+    function renderWelcome() {
+      quizContent.innerHTML = `
+        <p class="quiz-kicker">Diagnóstico Obra Caos</p>
+        <h3 class="quiz-title" id="quiz-title">Diagnóstico Obra Caos</h3>
+        <p class="quiz-copy">Vamos diagnosticar sua obra em menos de 3 minutos. Responda com honestidade, o resultado vale o quanto você for sincero.</p>
+        <div class="quiz-actions">
+          <button class="quiz-button" type="button" data-start>Começar
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </button>
+        </div>
+      `;
+      quizContent.querySelector("[data-start]").addEventListener("click", () => setStep("q1"));
+    }
+
+    function renderQuestion(step) {
+      const pergunta = perguntas.find((item) => item.id === step);
+      const selected = respostas[pergunta.id];
+      quizContent.innerHTML = `
+        <p class="quiz-kicker">${pergunta.numero}</p>
+        <h3 class="quiz-title" id="quiz-title">${escapeHtml(pergunta.titulo)}</h3>
+        ${pergunta.copy ? `<p class="quiz-copy">${escapeHtml(pergunta.copy)}</p>` : ""}
+        <div class="quiz-options">
+          ${pergunta.opcoes.map(([letra, texto]) => `
+            <button class="quiz-option ${selected === letra ? "is-selected" : ""}" type="button" data-answer="${letra}">
+              ${letra}) ${escapeHtml(texto)}
+            </button>
+          `).join("")}
+        </div>
+      `;
+      quizContent.querySelectorAll("[data-answer]").forEach((button) => {
+        button.addEventListener("click", () => {
+          respostas[pergunta.id] = button.dataset.answer;
+          if (pergunta.id === "q7") setStep(button.dataset.answer === "E" ? "outro" : "contact");
+          else setStep("q" + (Number(pergunta.id.slice(1)) + 1));
+        });
+      });
+    }
+
+    function renderOutro() {
+      quizContent.innerHTML = `
+        <p class="quiz-kicker">Campo opcional</p>
+        <h3 class="quiz-title" id="quiz-title">Em poucas palavras, qual é a sua maior dor hoje?</h3>
+        <form class="quiz-form" id="outro-form">
+          <div class="quiz-field">
+            <label for="outro-texto">Opcional</label>
+            <textarea id="outro-texto" maxlength="100" placeholder="Ex: &quot;Perco muito tempo em reunião de obra sem resolução...&quot;">${escapeHtml(respostas.outroTexto || "")}</textarea>
+          </div>
+          <div class="quiz-actions">
+            <button class="quiz-button" type="submit">Continuar
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </button>
+            <button class="quiz-button secondary" type="button" data-skip-outro>Pular</button>
+          </div>
+        </form>
+      `;
+      quizContent.querySelector("#outro-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        respostas.outroTexto = quizContent.querySelector("#outro-texto").value.trim() || null;
+        setStep("contact");
+      });
+      quizContent.querySelector("[data-skip-outro]").addEventListener("click", () => {
+        respostas.outroTexto = null;
+        setStep("contact");
+      });
+    }
+
+    function renderContact() {
+      quizContent.innerHTML = `
+        <p class="quiz-kicker">Seu diagnóstico está pronto.</p>
+        <h3 class="quiz-title" id="quiz-title">Seu diagnóstico está pronto.</h3>
+        <p class="quiz-copy">Pra ver o resultado e receber o material adaptado pra você, deixe seu contato abaixo.</p>
+        <form class="quiz-form" id="lead-form" novalidate>
+          <div class="quiz-field">
+            <label for="lead-nome">Nome</label>
+            <input id="lead-nome" name="nome" type="text" autocomplete="name" value="${escapeHtml(respostas.nome || "")}">
+          </div>
+          <div class="quiz-field">
+            <label for="lead-email">E-mail</label>
+            <input id="lead-email" name="email" type="email" autocomplete="email" value="${escapeHtml(respostas.email || "")}">
+          </div>
+          <div class="quiz-field">
+            <label for="lead-whatsapp">WhatsApp</label>
+            <input id="lead-whatsapp" name="whatsapp" type="tel" autocomplete="tel" value="${escapeHtml(respostas.whatsapp || "")}">
+          </div>
+          <p class="quiz-error" id="lead-error" aria-live="polite"></p>
+          <button class="quiz-button" type="submit">Ver meu resultado
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </button>
+          <p class="quiz-legal">Seus dados são usados só pra te enviar o diagnóstico e materiais Orceu. Sem spam.</p>
+        </form>
+      `;
+      quizContent.querySelector("#lead-form").addEventListener("submit", handleLeadSubmit);
+    }
+
+    function handleLeadSubmit(event) {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const error = form.querySelector("#lead-error");
+      const nome = form.nome.value.trim();
+      const email = form.email.value.trim();
+      const whatsapp = form.whatsapp.value.trim();
+      const phoneDigits = whatsapp.replace(/\D/g, "");
+      if (!nome) {
+        error.textContent = "Informe seu nome para receber o diagnóstico personalizado.";
+        form.nome.focus();
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        error.textContent = "Informe um e-mail válido.";
+        form.email.focus();
+        return;
+      }
+      if (phoneDigits.length < 10) {
+        error.textContent = "Informe um WhatsApp válido com DDD.";
+        form.whatsapp.focus();
+        return;
+      }
+      respostas.nome = nome;
+      respostas.email = email;
+      respostas.whatsapp = whatsapp;
+      finalResultado = calcularResultado(respostas);
+      setStep("loading");
+      salvarLead(respostas, finalResultado);
+      setTimeout(() => setStep("result"), 2000);
+    }
+
+    function renderLoading() {
+      quizContent.innerHTML = `
+        <div class="quiz-loading">
+          <div>
+            <div class="quiz-spinner" aria-hidden="true"></div>
+            <h3 class="quiz-title" id="quiz-title">Calculando seu diagnóstico...</h3>
+          </div>
+        </div>
+      `;
+    }
+
+    function getCtaHref(label, resultado) {
+      if (label === "Ver como o método funciona") return "#recursos";
+      if (label === "Começar grátis no Orceu") return "#recursos";
+
+      const subject = label.includes("Empresarial")
+        ? "Quero saber sobre o Orceu Empresarial"
+        : label.includes("equipe Orceu")
+          ? "Quero falar com a equipe Orceu"
+          : "Quero começar grátis no Orceu";
+      const body = "Meu diagnóstico foi: " + resultado.chaveResultado + ".";
+      return "mailto:comercial@orceu.com.br?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+    }
+
+    function renderResult() {
+      const resultadoFinal = finalResultado || calcularResultado(respostas);
+      const resultado = resultadoFinal.resultado;
+      const paragraphs = [`<p>${escapeHtml(resultado.texto)}</p>`];
+      if (resultado.soco) {
+        paragraphs.push(`<p><strong>${escapeHtml(resultado.soco)}</strong></p>`);
+      }
+      const ctaSecundario = resultado.ctaSecundario
+        ? `<a class="quiz-button secondary" href="${getCtaHref(resultado.ctaSecundario, resultadoFinal)}" data-result-cta>${escapeHtml(resultado.ctaSecundario)}</a>`
+        : "";
+      quizContent.innerHTML = `
+        <div class="quiz-result-header">
+          <div class="quiz-result-badge" style="--result-color: ${RESULT_COLORS[resultado.cor]};">${escapeHtml(resultado.cor)}</div>
+          <h3 class="quiz-title" id="quiz-title">${escapeHtml(resultado.headline)}</h3>
+          <p class="quiz-copy"><strong>${escapeHtml(resultado.subheadline)}</strong></p>
+        </div>
+        <div class="quiz-result-body">${paragraphs.join("")}</div>
+        <div class="quiz-delivery">
+          <strong>O que você leva daqui:</strong>
+          <span>${escapeHtml(resultado.pdf)}</span>
+          <span>${escapeHtml(resultado.beneficio)}</span>
+          ${resultado.obs ? `<span>${escapeHtml(resultado.obs)}</span>` : ""}
+        </div>
+        <div class="quiz-actions" style="justify-content:center; margin-top:20px;">
+          <a class="quiz-button" href="${getCtaHref(resultado.ctaPrincipal, resultadoFinal)}" data-result-cta>${escapeHtml(resultado.ctaPrincipal)}
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </a>
+          ${ctaSecundario}
+        </div>
+      `;
+      quizContent.querySelectorAll("[data-result-cta]").forEach((link) => {
+        link.addEventListener("click", () => setTimeout(closeQuiz, 80));
+      });
+    }
+
+    openDiagnostic.addEventListener("click", openQuiz);
+    quizBack.addEventListener("click", goBack);
+    quizClose.addEventListener("click", requestClose);
+    quizModal.querySelector("[data-quiz-close]").addEventListener("click", requestClose);
+    quizKeepGoing.addEventListener("click", hideExitConfirm);
+    quizExit.addEventListener("click", closeQuiz);
+    document.addEventListener("keydown", (event) => {
+      if (!quizModal.classList.contains("is-open")) return;
+      if (event.key === "Escape") requestClose();
+    });
+
+    /* ── Software Spotlight: Mouse Parallax ── */
+    (() => {
+      return; // Disabled per user request
+      const section = document.querySelector(".software-spotlight");
+      const device = section && section.querySelector(".software-device");
+      const glow = section && section.querySelector(".software-spotlight-visual");
+      if (!section || !device || window.matchMedia("(pointer: coarse)").matches) return;
+
+      const MAX_ROTATE = 6;
+      const GLOW_SHIFT = 15;
+      let targetX = 0, targetY = 0;
+      let currentX = 0, currentY = 0;
+      let rafId = null;
+      let isInSection = false;
+
+      function lerp(a, b, t) { return a + (b - a) * t; }
+
+      function tick() {
+        currentX = lerp(currentX, targetX, 0.08);
+        currentY = lerp(currentY, targetY, 0.08);
+
+        device.style.transform =
+          `perspective(1200px) rotateY(${(currentX * MAX_ROTATE).toFixed(2)}deg) rotateX(${(-currentY * MAX_ROTATE).toFixed(2)}deg) translateZ(0)`;
+
+        if (glow) {
+          glow.style.setProperty("--glow-x", `${50 + currentX * GLOW_SHIFT}%`);
+          glow.style.setProperty("--glow-y", `${50 + currentY * GLOW_SHIFT}%`);
+        }
+
+        if (isInSection || Math.abs(currentX - targetX) > 0.001 || Math.abs(currentY - targetY) > 0.001) {
+          rafId = requestAnimationFrame(tick);
+        } else {
+          rafId = null;
+        }
+      }
+
+      function startLoop() {
+        if (!rafId) rafId = requestAnimationFrame(tick);
+      }
+
+      section.addEventListener("mousemove", (e) => {
+        const rect = section.getBoundingClientRect();
+        targetX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+        targetY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+        isInSection = true;
+        startLoop();
+      });
+
+      section.addEventListener("mouseleave", () => {
+        targetX = 0;
+        targetY = 0;
+        isInSection = false;
+        startLoop();
+      });
+    })();
+
+    /* ── Software Spotlight: Stats Count Up ── */
+    (() => {
+      const statsBlock = document.querySelector(".software-spotlight-stats");
+      const statVals = document.querySelectorAll(".software-spotlight-stat-val");
+      if (!statsBlock || statVals.length === 0) return;
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateStats();
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      observer.observe(statsBlock);
+
+      function animateStats() {
+        const DURATION = 1500; // 1.5 seconds duration
+        const startTime = performance.now();
+
+        function tick(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / DURATION, 1);
+          // Ease out quad
+          const easeProgress = progress * (2 - progress);
+
+          statVals.forEach((el) => {
+            const target = parseInt(el.getAttribute("data-target"), 10);
+            const prefix = el.getAttribute("data-prefix") || "";
+            const suffix = el.getAttribute("data-suffix") || "";
+            if (isNaN(target)) return;
+
+            const current = Math.floor(easeProgress * target);
+            el.textContent = `${prefix}${current}${suffix}`;
+          });
+
+          if (progress < 1) {
+            requestAnimationFrame(tick);
+          } else {
+            // Ensure exact target value is rendered at the end
+            statVals.forEach((el) => {
+              const target = el.getAttribute("data-target");
+              const prefix = el.getAttribute("data-prefix") || "";
+              const suffix = el.getAttribute("data-suffix") || "";
+              el.textContent = `${prefix}${target}${suffix}`;
+            });
+          }
+        }
+
+        requestAnimationFrame(tick);
+      }
+    })();
+
+    // Mobile Navigation Toggle Logic
+    (() => {
+      const header = document.querySelector(".site-header");
+      const toggle = document.querySelector(".mobile-nav-toggle");
+      const nav = document.querySelector("#main-navigation");
+
+      if (!header || !toggle || !nav) return;
+
+      const setMenuOpen = (isOpen) => {
+        header.classList.toggle("mobile-menu-open", isOpen);
+        document.body.classList.toggle("mobile-menu-lock", isOpen);
+        toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        toggle.setAttribute("aria-label", isOpen ? "Fechar menu" : "Abrir menu");
+      };
+
+      toggle.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setMenuOpen(!header.classList.contains("mobile-menu-open"));
+      });
+
+      nav.addEventListener("click", (event) => {
+        const link = event.target.closest("a");
+        if (!link || link.classList.contains("nav-dropdown-trigger")) return;
+        setMenuOpen(false);
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!header.contains(event.target)) {
+          setMenuOpen(false);
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          setMenuOpen(false);
+        }
+      });
+
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 920) {
+          setMenuOpen(false);
+        }
+      });
+    })();
+
+    // Soluções Dropdown Toggle Logic
+    (() => {
+      const dropdownWrapper = document.querySelector(".nav-dropdown-wrapper");
+      const trigger = document.querySelector(".nav-dropdown-trigger");
+
+      if (!dropdownWrapper || !trigger) return;
+
+      trigger.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const isActive = dropdownWrapper.classList.toggle("is-active");
+        trigger.setAttribute("aria-expanded", isActive ? "true" : "false");
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener("click", (e) => {
+        if (!dropdownWrapper.contains(e.target)) {
+          dropdownWrapper.classList.remove("is-active");
+          trigger.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      // Close dropdown when pressing Escape
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          dropdownWrapper.classList.remove("is-active");
+          trigger.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      // Close dropdown when clicking on any link inside it
+      const dropdownLinks = dropdownWrapper.querySelectorAll(".nav-dropdown a");
+      dropdownLinks.forEach(link => {
+        link.addEventListener("click", () => {
+          dropdownWrapper.classList.remove("is-active");
+          trigger.setAttribute("aria-expanded", "false");
+        });
+      });
+    })();
+  
+</script>

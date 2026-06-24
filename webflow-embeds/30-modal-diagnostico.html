@@ -1,0 +1,34 @@
+<div class="quiz-modal" id="diagnostic-modal" role="presentation" aria-hidden="true">
+    <div class="quiz-backdrop" data-quiz-close></div>
+    <section class="quiz-dialog" role="dialog" aria-modal="true" aria-labelledby="quiz-title">
+      <div class="quiz-topbar">
+        <button class="quiz-icon-button" id="quiz-back" type="button" aria-label="Voltar">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4L6 8l4 4"/></svg>
+        </button>
+        <div class="quiz-steps-indicator" id="quiz-steps-indicator" hidden>
+          <span class="quiz-dot" data-dot="1"></span>
+          <span class="quiz-dot" data-dot="2"></span>
+          <span class="quiz-dot" data-dot="3"></span>
+          <span class="quiz-dot" data-dot="4"></span>
+          <span class="quiz-dot" data-dot="5"></span>
+          <span class="quiz-dot" data-dot="6"></span>
+          <span class="quiz-dot" data-dot="7"></span>
+        </div>
+        <button class="quiz-icon-button" id="quiz-close" type="button" aria-label="Fechar diagnóstico">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+        </button>
+      </div>
+      <div class="quiz-content" id="quiz-content"></div>
+      <div class="quiz-confirm" id="quiz-confirm" aria-hidden="true">
+        <div class="quiz-confirm-card">
+          <h4>Tem certeza?</h4>
+          <p>O diagnóstico só vale se você chegar até o fim.</p>
+          <div class="quiz-actions">
+            <button class="quiz-button" id="quiz-keep-going" type="button">Continuar</button>
+            <button class="quiz-button secondary" id="quiz-exit" type="button">Sair</button>
+          </div>
+        </div>
+      </div>
+      <span class="quiz-sr-status" id="quiz-status" role="status" aria-live="polite"></span>
+    </section>
+  </div>
