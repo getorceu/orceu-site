@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://orceu-izyu.vercel.app/sitemap.xml
