@@ -9752,3 +9752,23 @@
         grid-template-columns: repeat(5, 42px);
       }
     }
+
+    /* Unified 25px rounding across interactive buttons and CTAs. */
+    .btn,
+    .btn-whatsapp,
+    .card-cta,
+    .software-spotlight-cta,
+    .diagnostic-open,
+    .resources-offer-cta,
+    .resources-journey-tab,
+    .quiz-button,
+    .quiz-option,
+    .quiz-icon-button,
+    .slider-arrow,
+    .mobile-nav-toggle,
+    .pf-profiles .pf-arrow,
+    .pf-profiles .pf-dot,
+    .audience-nav,
+    .audience-dot {
+      border-radius: 25px;
+    }
