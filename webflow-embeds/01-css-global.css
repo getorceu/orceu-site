@@ -1619,6 +1619,7 @@
     }
 
     .logo-marquee-section {
+      --logo-marquee-gap: clamp(34px, 3.4vw, 62px);
       position: relative;
       padding: 0 max(56px, calc((100vw - 1140px) / 2));
       background: transparent;
@@ -1664,15 +1665,12 @@
       will-change: transform;
     }
 
-    .logo-marquee-shell:hover .logo-marquee-track {
-      animation-play-state: paused;
-    }
-
     .logo-marquee-group {
       display: flex;
+      flex: 0 0 auto;
       align-items: center;
-      gap: clamp(34px, 3.4vw, 62px);
-      padding: 0 clamp(8px, 1.2vw, 16px);
+      gap: var(--logo-marquee-gap);
+      margin-right: var(--logo-marquee-gap);
       white-space: nowrap;
     }
 
@@ -5886,15 +5884,12 @@
       }
 
       .logo-marquee-section {
+        --logo-marquee-gap: 28px;
         padding: 0 20px;
       }
 
       .logo-marquee-window {
         padding: var(--blue-stack-gap) 0;
-      }
-
-      .logo-marquee-group {
-        gap: 28px;
       }
 
       .logo-marquee-item {
