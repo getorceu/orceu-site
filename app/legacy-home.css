@@ -59,7 +59,7 @@
     html {
       scroll-behavior: smooth;
       background: var(--azul-real);
-      overscroll-behavior-y: none;
+      overscroll-behavior-y: auto;
       font-family: var(--font-primary);
     }
 
@@ -67,7 +67,7 @@
       min-height: 100vh;
       margin: 0;
       overflow-x: hidden;
-      overscroll-behavior-y: none;
+      overscroll-behavior-y: auto;
       color: var(--white);
       background: transparent;
       font-family: var(--font-primary);
@@ -1692,7 +1692,7 @@
       display: flex;
       flex: 0 0 auto;
       align-items: center;
-      padding: 0;
+      padding: 0 28px 0 0;
     }
 
     .logo-marquee-strip {
@@ -1701,7 +1701,7 @@
       width: auto;
       max-width: none;
       height: clamp(34px, 4.2vw, 58px);
-      margin-right: 18px;
+      margin-right: 0;
       opacity: 0.22;
       user-select: none;
       -webkit-user-drag: none;
@@ -5779,9 +5779,13 @@
         padding: var(--blue-stack-gap) 0;
       }
 
+      .logo-marquee-group {
+        padding-right: 18px;
+      }
+
       .logo-marquee-strip {
         height: clamp(30px, 6vw, 42px);
-        margin-right: 12px;
+        margin-right: 0;
       }
 
       .ecosystem-title {
