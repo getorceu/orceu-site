@@ -1116,7 +1116,7 @@
       position: relative;
       padding: clamp(48px, 6vw, 78px) max(56px, calc((100vw - 1140px) / 2)) clamp(44px, 5vw, 70px);
       overflow: hidden;
-      background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+      background: transparent;
       font-family: "Axiforma", sans-serif;
       font-synthesis: none;
     }
@@ -1145,14 +1145,14 @@
       margin: 0 auto;
       padding: clamp(38px, 4.2vw, 62px) clamp(30px, 5.2vw, 76px) clamp(42px, 5.2vw, 68px);
       overflow: hidden;
-      color: #050816;
-      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-      border: 1px solid rgba(15, 23, 42, 0.08);
+      color: rgba(92, 103, 131, 0.92);
+      background: #ffffff;
+      border: 1px solid rgba(159, 188, 245, 0.34);
       border-radius: clamp(30px, 4vw, 58px);
       box-shadow:
-        0 28px 60px rgba(148, 163, 184, 0.16),
-        0 8px 24px rgba(15, 23, 42, 0.06),
-        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        0 34px 72px rgba(15, 37, 96, 0.18),
+        0 10px 28px rgba(15, 37, 96, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.98);
     }
 
     .software-spotlight-shell::before {
@@ -1161,8 +1161,8 @@
       inset: 0;
       pointer-events: none;
       background:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0) 36%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0) 54%, rgba(226, 232, 240, 0.52) 100%);
+        linear-gradient(135deg, rgba(159, 188, 245, 0.14), rgba(255, 255, 255, 0) 40%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0) 56%, rgba(33, 70, 173, 0.03) 100%);
     }
 
     .software-spotlight-shell > * {
@@ -1201,15 +1201,15 @@
     .software-spotlight .section-kicker {
       justify-content: center;
       margin: 0 auto 20px;
-      color: rgba(5, 8, 22, 0.76);
-      background: rgba(241, 245, 249, 0.92);
-      border-color: rgba(148, 163, 184, 0.32);
+      color: var(--azul-real);
+      background: rgba(33, 70, 173, 0.05);
+      border-color: rgba(33, 70, 173, 0.16);
     }
 
     .software-spotlight h2 {
       max-width: none;
       margin: 0 auto;
-      color: #050816;
+      color: rgba(92, 103, 131, 0.92);
       font-family: "Axiforma", sans-serif;
       font-size: clamp(2.4rem, 4.4vw, 3.8rem);
       font-weight: 400;
@@ -1226,7 +1226,7 @@
 
     .software-spotlight h2 span {
       display: block;
-      color: #050816;
+      color: rgba(92, 103, 131, 0.92);
     }
 
     .software-spotlight h2 span:first-child {
@@ -1235,7 +1235,7 @@
     }
 
     .software-spotlight h2 .highlight-blue {
-      color: #050816;
+      color: var(--azul-real);
       font-weight: 900;
     }
 
@@ -1249,16 +1249,16 @@
 
     .software-spotlight-text p {
       margin: 0;
-      color: rgba(15, 23, 42, 0.68);
+      color: rgba(92, 103, 131, 0.9);
       font-size: clamp(0.94rem, 1.1vw, 1.06rem);
       font-weight: 400;
       line-height: 1.68;
       letter-spacing: -0.02em;
     }
 
-    .software-spotlight .inline-riow-logo.logo-muted {
-      filter: grayscale(1) brightness(0);
-      opacity: 1;
+    .software-spotlight .inline-riow-logo.inline-riow-logo-wordmark {
+      background-color: var(--azul-real);
+      opacity: 0.94;
     }
 
     /* ── Software Spotlight Stats Block ── */
@@ -1286,13 +1286,10 @@
       inset: 0;
       z-index: -1;
       border-radius: 22px;
-      background:
-        radial-gradient(circle at 14% 22%, rgba(255, 255, 255, 0.9) 0%, transparent 48%),
-        linear-gradient(180deg, rgba(248, 250, 252, 0.96) 0%, rgba(241, 245, 249, 0.98) 100%);
-      border: 1px solid rgba(148, 163, 184, 0.22);
+      background: linear-gradient(180deg, rgba(33, 70, 173, 0.02) 0%, rgba(33, 70, 173, 0.06) 100%);
+      border: 1px solid rgba(33, 70, 173, 0.12);
       box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.92),
-        0 12px 24px rgba(148, 163, 184, 0.12);
+        inset 0 1px 0 rgba(255, 255, 255, 0.72);
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
       transform: translate3d(0, 0, 0);
@@ -1311,7 +1308,7 @@
       align-items: flex-start;
       padding-left: clamp(12px, 2.2vw, 28px);
       padding-right: clamp(12px, 2.2vw, 28px);
-      border-right: 1px solid rgba(148, 163, 184, 0.2);
+      border-right: 1px solid rgba(33, 70, 173, 0.1);
     }
 
     .software-spotlight-stat-col:first-child {
@@ -1326,7 +1323,7 @@
     .software-spotlight-stat-top {
       font-size: clamp(0.64rem, 0.75vw, 0.74rem);
       font-weight: 600;
-      color: rgba(71, 85, 105, 0.72);
+      color: rgba(92, 103, 131, 0.74);
       text-transform: uppercase;
       letter-spacing: 0.06em;
       margin-bottom: 4px;
@@ -1335,7 +1332,7 @@
     .software-spotlight-stat-val {
       font-size: clamp(1.25rem, 1.8vw, 1.85rem);
       font-weight: 800;
-      color: #0f172a;
+      color: var(--azul-real);
       background: none;
       -webkit-text-fill-color: currentColor;
       line-height: 1.1;
@@ -1347,7 +1344,7 @@
     .software-spotlight-stat-bot {
       font-size: clamp(0.68rem, 0.8vw, 0.8rem);
       font-weight: 500;
-      color: rgba(51, 65, 85, 0.76);
+      color: rgba(92, 103, 131, 0.88);
       line-height: 1.25;
       letter-spacing: -0.01em;
       white-space: nowrap;
@@ -1442,10 +1439,10 @@
       aspect-ratio: 16 / 9;
       background: #ffffff;
       border-radius: 16px;
-      border: 1px solid rgba(148, 163, 184, 0.34);
+      border: 1px solid rgba(33, 70, 173, 0.18);
       box-shadow:
-        0 24px 54px rgba(15, 23, 42, 0.12),
-        0 10px 24px rgba(148, 163, 184, 0.16),
+        0 24px 54px rgba(15, 37, 96, 0.1),
+        0 10px 24px rgba(33, 70, 173, 0.08),
         inset 0 1px 0 rgba(255, 255, 255, 0.9);
       overflow: hidden;
       transform-origin: center center;
@@ -1462,7 +1459,7 @@
     }
 
     .software-video-headline {
-      color: #050816;
+      color: rgba(92, 103, 131, 0.92);
       font-size: clamp(1.48rem, 2.35vw, 2.08rem);
       font-weight: 300;
       text-align: center;
@@ -1472,6 +1469,7 @@
     }
 
     .software-video-headline strong {
+      color: var(--azul-real);
       font-weight: 900;
     }
 
@@ -1709,169 +1707,22 @@
     .logo-marquee-group {
       display: flex;
       align-items: center;
-      gap: clamp(34px, 3.4vw, 62px);
-      padding: 0 clamp(8px, 1.2vw, 16px);
-      white-space: nowrap;
-    }
-
-    .logo-marquee-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      min-height: clamp(34px, 3vw, 42px);
-      white-space: nowrap;
-      color: rgba(171, 191, 244, 0.52);
-      font-family: "Axiforma", sans-serif;
-      font-size: clamp(1rem, 1.5vw, 1.56rem);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      text-transform: uppercase;
-    }
-
-    .logo-marquee-icon {
-      position: relative;
-      display: inline-grid;
       flex: 0 0 auto;
-      width: clamp(30px, 2.5vw, 38px);
-      height: clamp(30px, 2.5vw, 38px);
-      border: 1px solid currentColor;
-      border-radius: 10px;
-      background: rgba(171, 191, 244, 0.06);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      gap: clamp(42px, 4vw, 72px);
+      padding: 0 clamp(8px, 1.2vw, 16px);
     }
 
-    .logo-marquee-icon::before,
-    .logo-marquee-icon::after {
-      position: absolute;
-      content: "";
-      background: currentColor;
-      border-radius: 999px;
-    }
-
-    .logo-marquee-icon.is-grid::before {
-      top: 10px;
-      left: 9px;
-      width: 12px;
-      height: 2px;
-      box-shadow: 0 6px 0 currentColor;
-    }
-
-    .logo-marquee-icon.is-grid::after {
-      top: 9px;
-      left: 18px;
-      width: 2px;
-      height: 14px;
-    }
-
-    .logo-marquee-icon.is-arc::before {
-      inset: 7px;
-      border: 2px solid currentColor;
-      border-right-color: transparent;
-      background: transparent;
-      border-radius: 999px;
-    }
-
-    .logo-marquee-icon.is-arc::after {
-      top: 10px;
-      right: 9px;
-      width: 6px;
-      height: 6px;
-    }
-
-    .logo-marquee-icon.is-beam::before {
-      top: 17px;
-      left: 7px;
-      width: 24px;
-      height: 2px;
-      transform: rotate(-38deg);
-      transform-origin: center;
-    }
-
-    .logo-marquee-icon.is-beam::after {
-      top: 9px;
-      left: 16px;
-      width: 2px;
-      height: 16px;
-      transform: rotate(-38deg);
-      transform-origin: center;
-    }
-
-    .logo-marquee-icon.is-pillars::before {
-      top: 8px;
-      left: 10px;
-      width: 3px;
-      height: 18px;
-      box-shadow: 8px 0 0 currentColor;
-    }
-
-    .logo-marquee-icon.is-pillars::after {
-      top: 11px;
-      left: 7px;
-      width: 20px;
-      height: 2px;
-    }
-
-    .logo-marquee-icon.is-axis::before {
-      top: 8px;
-      left: 17px;
-      width: 2px;
-      height: 18px;
-    }
-
-    .logo-marquee-icon.is-axis::after {
-      top: 16px;
-      left: 8px;
-      width: 20px;
-      height: 2px;
-    }
-
-    .logo-marquee-icon.is-axis {
-      transform: rotate(45deg);
-    }
-
-    .logo-marquee-icon.is-axis + .logo-marquee-label {
-      display: inline-block;
-      transform: translateX(-2px);
-    }
-
-    .logo-marquee-icon.is-node::before {
-      top: 9px;
-      left: 9px;
-      width: 6px;
-      height: 6px;
-      box-shadow: 11px 0 0 currentColor, 5.5px 9px 0 currentColor;
-    }
-
-    .logo-marquee-icon.is-node::after {
-      top: 14px;
-      left: 12px;
-      width: 12px;
-      height: 2px;
-      transform: rotate(30deg);
-      transform-origin: left center;
-      box-shadow: -5px -3px 0 currentColor;
-    }
-
-    .logo-marquee-icon.is-wave::before {
-      top: 11px;
-      left: 7px;
-      width: 22px;
-      height: 2px;
-      box-shadow: 0 6px 0 currentColor;
-      transform: skewX(-28deg);
-    }
-
-    .logo-marquee-icon.is-wave::after {
-      top: 8px;
-      left: 11px;
-      width: 14px;
-      height: 2px;
-      transform: skewX(28deg);
-    }
-
-    .logo-marquee-label {
-      display: inline-block;
-      line-height: 1;
+    .logo-marquee-strip {
+      display: block;
+      flex: 0 0 auto;
+      width: auto;
+      max-width: none;
+      height: clamp(34px, 4.2vw, 58px);
+      opacity: 0.18;
+      user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none;
+      filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.06));
     }
 
     @keyframes logoMarquee {
@@ -5923,17 +5774,11 @@
       }
 
       .logo-marquee-group {
-        gap: 28px;
+        gap: 20px;
       }
 
-      .logo-marquee-item {
-        font-size: clamp(1rem, 5vw, 1.42rem);
-        gap: 10px;
-      }
-
-      .logo-marquee-icon {
-        width: 28px;
-        height: 28px;
+      .logo-marquee-strip {
+        height: clamp(30px, 6vw, 42px);
       }
 
       .ecosystem-title {
@@ -9967,7 +9812,7 @@
         <div class="slide-inner">
           <p class="eyebrow">Método OP em operation</p>
           <h1>Obra que roda<br>quando você não está.</h1>
-          <p class="hero-desc">Operação estruturada, equipe com autonomia, margem em tempo real. Criado dentro da <a class="riow-logo-link" href="https://www.instagram.com/riow.construcao/" target="_blank" rel="noreferrer"><img class="inline-riow-logo" src="https://cdn.prod.website-files.com/6492e8ffc454a19867291571/6a2c48775857d6e93c22030f_Ativo%2050.png" alt="Riow"></a>, testado em mais de 120 obras e R$ 200MM geridos.</p>
+          <p class="hero-desc">Operação estruturada, equipe com autonomia, margem em tempo real. Criado dentro da <a class="riow-logo-link" href="https://www.instagram.com/riow.construcao/" target="_blank" rel="noreferrer"><img class="inline-riow-logo" src="https://cdn.prod.website-files.com/6492e8ffc454a19867291571/6a2c48775857d6e93c22030f_Ativo%2050.png" alt="Riow"></a>, testado em mais de 130 obras e R$ 200MM geridos.</p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="#solucoes">Explorar soluções <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
             <a class="btn btn-whatsapp" href="https://wa.link/703xe3" target="_blank" rel="noopener noreferrer" aria-label="Solicitar contato pelo WhatsApp"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M16.02 4.5c-6.31 0-11.42 5.08-11.42 11.34 0 2.14.6 4.14 1.64 5.85L4.5 27.5l5.98-1.7a11.5 11.5 0 0 0 5.54 1.42c6.31 0 11.42-5.08 11.42-11.34S22.33 4.5 16.02 4.5Zm0 20.75c-1.78 0-3.44-.5-4.86-1.36l-.42-.25-3.28.93.95-3.18-.28-.45a9.24 9.24 0 0 1-1.56-5.1c0-5.18 4.24-9.38 9.45-9.38s9.45 4.2 9.45 9.38-4.24 9.41-9.45 9.41Zm5.42-7.02c-.3-.15-1.76-.86-2.03-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.95 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.47-.89-.79-1.49-1.76-1.66-2.06-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.6-.92-2.19-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.01-1.04 2.46 0 1.45 1.07 2.86 1.21 3.06.15.2 2.1 3.18 5.08 4.46.71.3 1.26.48 1.7.62.71.22 1.36.19 1.87.11.57-.08 1.76-.72 2-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35Z" clip-rule="evenodd"/></svg></a>
@@ -10036,24 +9881,10 @@
         <div class="logo-marquee-window" aria-hidden="true">
           <div class="logo-marquee-track">
             <div class="logo-marquee-group">
-              <span class="logo-marquee-item"><span class="logo-marquee-icon is-grid" aria-hidden="true"></span><span class="logo-marquee-label">Pilar</span></span>
-              <span class="logo-marquee-item"><span class="logo-marquee-icon is-arc" aria-hidden="true"></span><span class="logo-marquee-label">Prumo</span></span>
-              <span class="logo-marquee-item"><span class="logo-marquee-icon is-beam" aria-hidden="true"></span><span class="logo-marquee-label">Nexo</span></span>
-              <span class="logo-marquee-item"><span class="logo-marquee-icon is-pillars" aria-hidden="true"></span><span class="logo-marquee-label">Base</span></span>
-              <span class="logo-marquee-item"><span class="logo-marquee-icon is-axis" aria-hidden="true"></span><span class="logo-marquee-label">Fluxo</span></span>
-              <span class="logo-marquee-item"><span class="logo-marquee-icon is-node" aria-hidden="true"></span><span class="logo-marquee-label">Ritmo</span></span>
-              <span class="logo-marquee-item"><span class="logo-marquee-icon is-wave" aria-hidden="true"></span><span class="logo-marquee-label">Norte</span></span>
-              <span class="logo-marquee-item"><span class="logo-marquee-icon is-grid" aria-hidden="true"></span><span class="logo-marquee-label">Viga</span></span>
+              <img class="logo-marquee-strip" src="assets/logos%20minds0.svg" alt="" loading="lazy" decoding="async">
             </div>
             <div class="logo-marquee-group" aria-hidden="true">
-              <span class="logo-marquee-item"><span class="logo-marquee-icon is-grid" aria-hidden="true"></span><span class="logo-marquee-label">Pilar</span></span>
-              <span class="logo-marquee-item"><span class="logo-marquee-icon is-arc" aria-hidden="true"></span><span class="logo-marquee-label">Prumo</span></span>
-              <span class="logo-marquee-item"><span class="logo-marquee-icon is-beam" aria-hidden="true"></span><span class="logo-marquee-label">Nexo</span></span>
-              <span class="logo-marquee-item"><span class="logo-marquee-icon is-pillars" aria-hidden="true"></span><span class="logo-marquee-label">Base</span></span>
-              <span class="logo-marquee-item"><span class="logo-marquee-icon is-axis" aria-hidden="true"></span><span class="logo-marquee-label">Fluxo</span></span>
-              <span class="logo-marquee-item"><span class="logo-marquee-icon is-node" aria-hidden="true"></span><span class="logo-marquee-label">Ritmo</span></span>
-              <span class="logo-marquee-item"><span class="logo-marquee-icon is-wave" aria-hidden="true"></span><span class="logo-marquee-label">Norte</span></span>
-              <span class="logo-marquee-item"><span class="logo-marquee-icon is-grid" aria-hidden="true"></span><span class="logo-marquee-label">Viga</span></span>
+              <img class="logo-marquee-strip" src="assets/logos%20minds0.svg" alt="" loading="lazy" decoding="async">
             </div>
           </div>
         </div>
@@ -10094,7 +9925,7 @@
               <span class="founder-stat-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
               </span>
-              <span class="founder-stat-value">+120</span>
+              <span class="founder-stat-value">+130</span>
               <span class="founder-stat-label">obras entregues</span>
             </li>
             <li>
@@ -10403,14 +10234,14 @@
           </h2>
           
           <div class="software-spotlight-text">
-            <p>O Orceu Copiloto foi desenvolvido dentro da <a class="riow-logo-link" href="https://www.instagram.com/riow.construcao/" target="_blank" rel="noreferrer"><img class="inline-riow-logo logo-muted" src="https://cdn.prod.website-files.com/6492e8ffc454a19867291571/6a2c48775857d6e93c22030f_Ativo%2050.png" alt="Riow" loading="lazy" decoding="async"></a> Construção.<br>Orçamento, suprimentos, financeiro e cronograma integrados num único fluxo.</p>
+            <p>O Orceu Copiloto foi desenvolvido dentro da <a class="riow-logo-link" href="https://www.instagram.com/riow.construcao/" target="_blank" rel="noreferrer"><span class="inline-riow-logo inline-riow-logo-wordmark" role="img" aria-label="Riow"></span></a> Construção.<br>Orçamento, suprimentos, financeiro e cronograma integrados num único fluxo.</p>
           </div>
 
           <!-- Stats Block -->
           <div class="software-spotlight-stats">
             <div class="software-spotlight-stat-col">
               <span class="software-spotlight-stat-top">Entregas</span>
-              <span class="software-spotlight-stat-val" data-target="120" data-prefix="+" data-suffix="">+120</span>
+              <span class="software-spotlight-stat-val" data-target="130" data-prefix="+" data-suffix="">+130</span>
               <span class="software-spotlight-stat-bot">obras entregues</span>
             </div>
             <div class="software-spotlight-stat-col">
