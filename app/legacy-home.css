@@ -1701,11 +1701,13 @@
       width: auto;
       max-width: none;
       height: clamp(34px, 4.2vw, 58px);
-      margin-right: -10px;
+      margin-right: 0;
       opacity: 0.22;
       user-select: none;
       -webkit-user-drag: none;
       pointer-events: none;
+      transform: scaleX(1.006);
+      transform-origin: center;
       filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.06));
     }
 
@@ -5781,7 +5783,8 @@
 
       .logo-marquee-strip {
         height: clamp(30px, 6vw, 42px);
-        margin-right: -6px;
+        margin-right: 0;
+        transform: scaleX(1.004);
       }
 
       .ecosystem-title {
