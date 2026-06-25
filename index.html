@@ -4552,6 +4552,7 @@
       width: 100%;
       z-index: 1;
       isolation: isolate;
+      overflow: hidden;
       margin-bottom: 0;
       padding: clamp(52px, 7vw, 84px) max(56px, calc((100vw - 1140px) / 2)) clamp(24px, 3.5vw, 36px);
       font-family: "Axiforma", sans-serif;
@@ -4569,6 +4570,45 @@
       width: 100%;
       max-width: 1140px;
       margin: 0 auto;
+    }
+
+    .site-footer-outline {
+      position: absolute;
+      right: clamp(-220px, -15vw, -104px);
+      bottom: clamp(-392px, -27vw, -228px);
+      width: clamp(560px, 54vw, 780px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.52;
+    }
+
+    .site-footer-outline img {
+      display: block;
+      width: 100%;
+      height: auto;
+      opacity: 0.68;
+      filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.025));
+    }
+
+    .site-footer-outline::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(4, 10, 28, 0.08) 8%,
+        rgba(4, 10, 28, 0.28) 24%,
+        rgba(4, 10, 28, 0.56) 40%,
+        rgba(3, 8, 24, 0.82) 56%,
+        rgba(2, 5, 15, 0.96) 72%,
+        rgba(2, 5, 15, 1) 100%
+      );
+    }
+
+    .site-footer-top,
+    .site-footer-bottom {
+      position: relative;
+      z-index: 1;
     }
 
     .site-footer-top {
@@ -4712,7 +4752,7 @@
 
     .site-footer-bottom {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
       margin-top: clamp(40px, 5vw, 64px);
       padding-top: 24px;
@@ -4723,31 +4763,6 @@
 
     .site-footer-bottom p {
       margin: 0;
-    }
-
-    .site-footer-legal {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-    }
-
-    .site-footer-legal a {
-      color: rgba(237, 243, 255, 0.68);
-      text-decoration: none;
-      font-weight: 600;
-      padding: 7px 16px;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 99px;
-      transition: all 220ms ease;
-    }
-
-    .site-footer-legal a:hover {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(255, 255, 255, 0.12);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-      transform: translateY(-1px);
     }
 
     .resource-reveal {
@@ -5433,6 +5448,13 @@
         padding-left: 20px;
       }
 
+      .site-footer-outline {
+        right: clamp(-240px, -20vw, -140px);
+        bottom: clamp(-344px, -31vw, -212px);
+        width: clamp(440px, 68vw, 660px);
+        opacity: 0.94;
+      }
+
       .site-footer-top {
         grid-template-columns: 1fr;
         gap: 40px;
@@ -6101,6 +6123,10 @@
         padding-bottom: 24px;
       }
 
+      .site-footer-outline {
+        display: none;
+      }
+
       .site-footer-copy {
         margin-top: 16px;
         font-size: 0.82rem;
@@ -6130,14 +6156,8 @@
       }
 
       .site-footer-bottom {
-        flex-direction: column-reverse;
-        align-items: center;
-        gap: 16px;
-      }
-
-      .site-footer-legal {
         justify-content: center;
-        margin-left: 0;
+        align-items: center;
         text-align: center;
       }
 
@@ -10544,6 +10564,9 @@
 
   <footer class="site-footer" aria-labelledby="footer-brand-title">
     <div class="site-footer-shell">
+      <div class="site-footer-outline" aria-hidden="true">
+        <img src="assets/contorno0.svg" alt="" loading="lazy" decoding="async">
+      </div>
       <div class="site-footer-top">
         <div class="site-footer-brand">
           <a class="site-footer-mark" href="#inicio" aria-label="Orceu">
@@ -10573,9 +10596,6 @@
 
       <div class="site-footer-bottom">
         <p>© 2026 Orceu. Todos os direitos reservados.</p>
-        <div class="site-footer-legal">
-          <a href="mailto:comercial@orceu.com.br">comercial@orceu.com.br</a>
-        </div>
       </div>
     </div>
   </footer>
