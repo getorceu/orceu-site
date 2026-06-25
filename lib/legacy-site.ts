@@ -23,9 +23,15 @@ const HOME_FRAGMENTS = [
 ];
 
 const SCRIPT_TAG_RE = /<script\b[^>]*>[\s\S]*?<\/script>/gi;
-const RELATIVE_ASSET_RE = /\b(src|href|poster)=(")(?:public\/)?assets\//gi;
+const ASSET_ATTRIBUTE_RE = /\b(src|srcset|href|poster)=(")([^"]*)"/gi;
 const MISSING_DASHBOARD_VIDEO_RE =
-  /<source\s+src="assets\/dashboard-video\.mp4"\s+type="video\/mp4">\s*/i;
+  /<source\s+src="(?:public\/)?assets\/dashboard-video\.mp4"\s+type="video\/mp4">\s*/i;
+
+function normalizeLegacyAssetValue(value: string) {
+  return value
+    .replace(/(^|,\s*)(?:public\/)?assets\//gi, "$1/assets/")
+    .replace(/^assets\//i, "/assets/");
+}
 
 async function readLegacy(relativePath: string) {
   const absolutePath = path.join(BACKUP_ROOT, relativePath);
@@ -39,7 +45,11 @@ export async function loadLegacyHomeHtml() {
       return html
         .replace(SCRIPT_TAG_RE, "")
         .replace(MISSING_DASHBOARD_VIDEO_RE, "")
-        .replace(RELATIVE_ASSET_RE, '$1=$2/assets/')
+        .replace(
+          ASSET_ATTRIBUTE_RE,
+          (_, attribute: string, quote: string, value: string) =>
+            `${attribute}=${quote}${normalizeLegacyAssetValue(value)}${quote}`,
+        )
         .trim();
     }),
   );
