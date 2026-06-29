@@ -15,7 +15,7 @@ const ARAGUAINA_COORDS = {
   longitude: -48.2078,
 };
 
-const RADAR_LIGHT_BLUE = "#8EA3E3";
+const RADAR_LIGHT_BLUE = "#C9D9FF";
 
 const UTILITY_BAR_HTML = `<!-- Utility bar -->
   <div style="background:#2146AD;color:#EAF0FF;border-bottom:1px solid rgba(33,70,173,.18)">
@@ -44,7 +44,7 @@ const MASTHEAD_BRAND_FIXED_HTML = `<div onclick="{{ goHome }}" style="cursor:poi
           <span style="font-family:'Axiforma',sans-serif;font-weight:800;font-size:18px;letter-spacing:.38em;text-transform:uppercase;color:#FAF7F1;padding-top:6px">RADAR</span>
           <img src="/assets/logo-orceu.svg" alt="Orceu" style="height:52px;width:auto;display:block;flex:0 0 auto">
         </div>
-        <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8EA3E3;margin-top:14px;font-weight:600">O RADAR OFICIAL DA CONSTRUÇÃO CIVIL</div>
+        <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#C9D9FF;margin-top:14px;font-weight:600">O RADAR OFICIAL DA CONSTRUÇÃO CIVIL</div>
       </div>`;
 
 const ARTICLE_META_HTML = `<div style="display:flex;align-items:center;gap:14px;padding:16px 0;border-top:1px solid #E7E2D8;border-bottom:1px solid #E7E2D8;margin-bottom:26px">
@@ -175,7 +175,7 @@ function customizeExpandedRadarDocument(html: string, rainForecastLabel: string)
       </div>
 
       <div style="display:flex;align-items:center;gap:10px;padding-left:18px;margin-left:18px;border-left:1px solid #ECE7DD;flex-shrink:0;min-width:132px">
-        <span style="width:7px;height:7px;border-radius:50%;background:#8EA3E3;box-shadow:0 0 0 3px rgba(142,163,227,.18);flex-shrink:0"></span>
+        <span style="width:7px;height:7px;border-radius:50%;background:#C9D9FF;box-shadow:0 0 0 3px rgba(201,217,255,.24);flex-shrink:0"></span>
         <div style="display:flex;flex-direction:column;justify-content:center;gap:2px;min-width:0">
           <span style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#9A8C7C">Chuva 7d</span>
           <span style="font-size:9.5px;font-weight:700;letter-spacing:.01em;color:#5B72B8;line-height:1.15;max-width:110px">${rainForecastLabel}</span>
@@ -198,7 +198,7 @@ function customizeExpandedRadarDocument(html: string, rainForecastLabel: string)
     .replace(/<div class="mh-search"[\s\S]*?<\/div>\s*<\/div>\s*<\/header>/, "</div>\n  </header>")
     .replaceAll("#FF6A1A", RADAR_LIGHT_BLUE)
     .replaceAll("#D9530A", RADAR_LIGHT_BLUE)
-    .replaceAll("rgba(255,106,26,.16)", "rgba(142,163,227,.22)");
+    .replaceAll("rgba(255,106,26,.16)", "rgba(201,217,255,.24)");
 }
 
 export async function GET() {
