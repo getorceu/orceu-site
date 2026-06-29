@@ -17,6 +17,7 @@ const ARAGUAINA_COORDS = {
 
 const RADAR_LIGHT_BLUE = "#C9D9FF";
 const RADAR_TEXT_GRAY = "#8E95A5";
+const RADAR_PANEL_BLUE = "#EAF2FF";
 
 const UTILITY_BAR_HTML = `<!-- Utility bar -->
   <div style="background:#2146AD;color:#EAF0FF;border-bottom:1px solid rgba(33,70,173,.18)">
@@ -195,6 +196,18 @@ function customizeExpandedRadarDocument(html: string, rainForecastLabel: string)
     .replace(
       'style="max-width:1240px;margin:0 auto;padding:26px 24px 22px;display:flex;align-items:flex-end;justify-content:space-between;gap:24px"',
       'style="max-width:1240px;margin:0 auto;padding:26px 24px 22px;display:flex;align-items:flex-end;justify-content:flex-start;gap:24px"',
+    )
+    .replace(
+      'class="eco-band" style="margin-top:14px;background:#2146AD;border-radius:5px;padding:36px 40px;color:#FAF7F1"',
+      `class="eco-band" style="margin-top:14px;background:${RADAR_PANEL_BLUE};border-radius:5px;padding:36px 40px;color:#2146AD"`,
+    )
+    .replace(
+      'style="height:1px;background:rgba(255,255,255,.14);flex:1"',
+      'style="height:1px;background:rgba(33,70,173,.16);flex:1"',
+    )
+    .replace(
+      "font-family:'Axiforma',serif;font-weight:700;font-size:21px;line-height:1.14;margin:0 0 8px;color:#FAF7F1",
+      "font-family:'Axiforma',serif;font-weight:700;font-size:21px;line-height:1.14;margin:0 0 8px;color:#2146AD",
     )
     .replace(/<div class="mh-search"[\s\S]*?<\/div>\s*<\/div>\s*<\/header>/, "</div>\n  </header>")
     .replaceAll("#FF6A1A", RADAR_LIGHT_BLUE)
