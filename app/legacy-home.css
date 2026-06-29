@@ -4702,6 +4702,7 @@
       outline: none !important;
     }
 
+    .footer-utility img,
     .footer-utility svg {
       display: block !important;
       flex: none !important;
@@ -4712,6 +4713,10 @@
       max-width: 18px !important;
       max-height: 18px !important;
       overflow: visible !important;
+    }
+
+    .footer-utility img {
+      object-fit: contain !important;
     }
 
     .footer-utility svg * {
