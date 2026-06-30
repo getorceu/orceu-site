@@ -1938,6 +1938,255 @@
       height: 16px;
     }
 
+    body.mind-modal-open {
+      overflow: hidden;
+    }
+
+    .mind-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: grid;
+      place-items: center;
+      padding: clamp(18px, 4vw, 56px);
+      font-family: Axiforma, Arial, sans-serif;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 220ms ease, visibility 220ms ease;
+    }
+
+    .mind-modal.is-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .mind-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      padding: 0;
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.88);
+      border: 0;
+      backdrop-filter: blur(12px);
+    }
+
+    .mind-modal-dialog {
+      position: relative;
+      width: min(960px, 100%);
+      max-height: min(88vh, 900px);
+      padding: clamp(30px, 4vw, 56px);
+      overflow: auto;
+      color: rgba(255, 255, 255, 0.88);
+      text-transform: uppercase;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(64, 97, 184, 0.2), transparent 34%),
+        linear-gradient(160deg, #151a23 0%, #05080e 58%, #02050a 100%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 32px;
+      box-shadow: 0 34px 120px rgba(0, 0, 0, 0.58), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transform: translateY(16px) scale(0.985);
+      transition: transform 260ms ease;
+    }
+
+    .mind-modal.is-open .mind-modal-dialog {
+      transform: translateY(0) scale(1);
+    }
+
+    .mind-modal-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 0 16px;
+      color: rgba(255, 255, 255, 0.74);
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      transition: transform 180ms ease, color 180ms ease, background 180ms ease;
+    }
+
+    .mind-modal-close:hover,
+    .mind-modal-close:focus-visible {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.12);
+      transform: scale(1.04);
+      outline: none;
+    }
+
+    .mind-modal-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(16px, 2vw, 24px);
+      margin: 6px auto clamp(26px, 3.4vw, 42px);
+    }
+
+    .mind-modal-logo img {
+      display: block;
+      width: min(360px, 58vw);
+      height: auto;
+    }
+
+    .mind-modal-logo span {
+      display: inline-flex;
+      align-items: center;
+      min-height: clamp(34px, 4vw, 48px);
+      padding-left: clamp(16px, 2vw, 24px);
+      color: rgba(255, 255, 255, 0.82);
+      font-size: clamp(1.1rem, 2.3vw, 2rem);
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      border-left: 2px solid rgba(255, 255, 255, 0.52);
+    }
+
+    .mind-modal-eyebrow {
+      margin: 0 0 16px;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: clamp(0.72rem, 0.9vw, 0.92rem);
+      font-weight: 800;
+      letter-spacing: 0.5em;
+      text-align: center;
+    }
+
+    .mind-modal-title {
+      max-width: 780px;
+      margin: 0 auto clamp(22px, 3vw, 34px);
+      color: #fff;
+      font-size: clamp(2rem, 5vw, 4.8rem);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: 0.05em;
+      text-align: center;
+    }
+
+    .mind-modal-copy {
+      display: grid;
+      gap: 18px;
+      max-width: 760px;
+      margin: 0 auto;
+      color: rgba(255, 255, 255, 0.68);
+      font-size: clamp(0.78rem, 1vw, 0.98rem);
+      font-weight: 400;
+      line-height: 1.7;
+      letter-spacing: 0.05em;
+    }
+
+    .mind-modal-copy p {
+      margin: 0;
+    }
+
+    .mind-modal-copy ul {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .mind-modal-copy li {
+      position: relative;
+      padding-left: 22px;
+    }
+
+    .mind-modal-copy li::before {
+      position: absolute;
+      top: 0.76em;
+      left: 0;
+      width: 7px;
+      height: 7px;
+      content: "";
+      background: #fff;
+      border-radius: 999px;
+      opacity: 0.72;
+    }
+
+    .mind-modal-note {
+      margin: clamp(28px, 3.4vw, 44px) 0 14px;
+      color: rgba(255, 255, 255, 0.62);
+      font-size: clamp(0.64rem, 0.8vw, 0.78rem);
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .mind-modal-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: min(460px, 100%);
+      min-height: 58px;
+      margin: 0 auto;
+      padding: 0 26px;
+      color: #03070d;
+      font-size: clamp(0.74rem, 1vw, 0.92rem);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-align: center;
+      text-decoration: none;
+      text-transform: uppercase;
+      background: #fff;
+      border-radius: 999px;
+      box-shadow: 0 18px 52px rgba(255, 255, 255, 0.14);
+      transition: transform 200ms ease, box-shadow 200ms ease;
+    }
+
+    .mind-modal-cta:hover,
+    .mind-modal-cta:focus-visible {
+      transform: scale(1.035);
+      box-shadow: 0 22px 60px rgba(255, 255, 255, 0.2);
+      outline: none;
+    }
+
+    @media (max-width: 680px) {
+      .mind-modal {
+        padding: 12px;
+      }
+
+      .mind-modal-dialog {
+        max-height: 92vh;
+        padding: 24px 20px 28px;
+        border-radius: 25px;
+      }
+
+      .mind-modal-close {
+        position: static;
+        margin: 0 0 22px auto;
+      }
+
+      .mind-modal-logo {
+        gap: 12px;
+      }
+
+      .mind-modal-logo img {
+        width: min(220px, 52vw);
+      }
+
+      .mind-modal-logo span {
+        min-height: 30px;
+        padding-left: 12px;
+        font-size: 1rem;
+      }
+
+      .mind-modal-eyebrow {
+        letter-spacing: 0.32em;
+      }
+
+      .mind-modal-copy {
+        line-height: 1.62;
+      }
+    }
+
     .diagnostic {
       --diagnostic-parallax-y: 0px;
       --diagnostic-parallax-x: 0px;
