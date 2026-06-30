@@ -174,7 +174,8 @@ const pageStyles = `
   .radar-home-brand-row {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
+    gap: 18px;
     flex: 1 1 auto;
     min-width: 0;
   }
@@ -191,6 +192,25 @@ const pageStyles = `
     width: auto;
     height: 42px;
     max-width: min(100%, 380px);
+  }
+
+  .radar-news-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 0 20px;
+    color: rgba(255,255,255,.82);
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: .1em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    background: linear-gradient(135deg, rgba(17,20,28,.9), rgba(4,7,13,.94));
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 999px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 16px 38px rgba(0,0,0,.16);
   }
 
   .radar-home-category-nav {
@@ -957,6 +977,17 @@ const pageStyles = `
       max-width: 100%;
     }
 
+    .radar-home-brand-row {
+      flex-wrap: wrap;
+    }
+
+    .radar-news-badge {
+      min-height: 30px;
+      padding: 0 14px;
+      font-size: 8.8px;
+      letter-spacing: .08em;
+    }
+
     .radar-home-nav > a:not(.radar-back-home-link) {
       padding-left: 16px;
       padding-right: 16px;
@@ -1142,6 +1173,9 @@ export default async function RadarArticlePage({ params }: ArticlePageProps) {
                 priority
               />
             </Link>
+            <span className="radar-news-badge">
+              O radar de notícias da construção civil
+            </span>
           </div>
         </div>
       </header>
