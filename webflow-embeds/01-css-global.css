@@ -9712,6 +9712,16 @@
         scrollbar-width: none;
       }
 
+      .ecosystem-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        width: 100%;
+        padding: 0;
+        overflow: visible;
+        scroll-snap-type: none;
+      }
+
       .ecosystem-grid::-webkit-scrollbar,
       .resources-pricing-layout::-webkit-scrollbar,
       .news-grid::-webkit-scrollbar {
@@ -9725,6 +9735,63 @@
         flex: 0 0 min(84vw, 332px);
         width: min(84vw, 332px);
         scroll-snap-align: start;
+      }
+
+      .product-card {
+        width: 100%;
+        min-height: auto;
+        padding: 18px 18px 16px;
+        border-radius: 16px;
+        box-shadow: 0 14px 34px rgba(8, 21, 58, 0.18);
+      }
+
+      .product-card::after {
+        background: radial-gradient(circle at 82% 12%, rgba(255, 255, 255, 0.1), transparent 18%);
+      }
+
+      .card-chip {
+        min-height: 24px;
+        padding: 0 11px;
+        font-size: 0.42rem;
+        letter-spacing: 0.14em;
+      }
+
+      .product-brand {
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .product-brand img {
+        width: 106px;
+      }
+
+      .product-name {
+        min-height: 20px;
+        padding-left: 9px;
+        font-size: 0.54rem;
+      }
+
+      .product-text {
+        margin-top: 14px;
+        font-size: 0.69rem;
+        line-height: 1.42;
+      }
+
+      .card-actions {
+        padding-top: 14px;
+      }
+
+      .card-cta {
+        min-width: 0;
+        min-height: 38px;
+        padding: 0 14px;
+        font-size: 0.68rem;
+        border-radius: 12px;
+      }
+
+      .card-cta svg {
+        width: 14px;
+        height: 14px;
       }
 
       .resources-pricing-card {
@@ -9942,6 +10009,30 @@
       .resources-full-offer {
         flex-basis: min(89vw, 320px);
         width: min(89vw, 320px);
+      }
+
+      .product-card {
+        padding: 16px 16px 14px;
+        border-radius: 15px;
+      }
+
+      .card-chip {
+        min-height: 22px;
+        padding: 0 10px;
+        font-size: 0.4rem;
+      }
+
+      .product-brand img {
+        width: 96px;
+      }
+
+      .product-text {
+        font-size: 0.66rem;
+      }
+
+      .card-cta {
+        min-height: 36px;
+        font-size: 0.64rem;
       }
 
       .software-spotlight-stats {
