@@ -5755,7 +5755,32 @@
         padding-bottom: 160px;
       }
 
+      .slide-with-media::before {
+        background: linear-gradient(180deg, rgba(8, 12, 22, 0.14) 0%, rgba(8, 12, 22, 0.14) 26%, rgba(8, 12, 22, 0.44) 58%, rgba(8, 12, 22, 0.88) 100%);
+      }
+
+      .slide-hero-media {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+      }
+
+      .slide-hero-image,
+      .slide-hero-image--main,
+      .slide-2 .slide-hero-image {
+        object-fit: contain;
+        object-position: center top;
+      }
+
+      .slide-inner {
+        max-width: min(100%, 26rem);
+        margin: 0 auto;
+        align-items: center;
+        text-align: center;
+      }
+
       .eyebrow {
+        align-self: center;
         min-height: 32px;
         padding: 0 14px 0 calc(14px + 0.18em);
         font-size: clamp(0.5rem, 2.4vw, 0.56rem);
@@ -5763,12 +5788,16 @@
       }
 
       .hero h1 {
-        font-size: clamp(1.85rem, 8vw, 2.55rem);
+        max-width: 11ch;
+        font-size: clamp(1.62rem, 7.2vw, 2.2rem);
+        line-height: 1.02;
       }
 
       .hero-desc {
+        max-width: 28ch;
         margin-top: 20px;
         font-size: clamp(0.86rem, 3.6vw, 0.98rem);
+        text-align: center;
       }
 
       .hero-bottom {
@@ -5777,6 +5806,8 @@
 
       .hero-actions {
         flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
         gap: 10px;
         margin-top: 20px;
       }
@@ -9418,19 +9449,41 @@
       }
 
       .slide-inner {
-        max-width: 100%;
+        max-width: min(100%, 26rem);
+        margin: 0 auto;
+        align-items: center;
+        text-align: center;
+      }
+
+      .slide-with-media::before {
+        background: linear-gradient(180deg, rgba(8, 12, 22, 0.14) 0%, rgba(8, 12, 22, 0.14) 26%, rgba(8, 12, 22, 0.44) 58%, rgba(8, 12, 22, 0.88) 100%);
+      }
+
+      .slide-hero-media {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+      }
+
+      .slide-hero-image,
+      .slide-hero-image--main,
+      .slide-2 .slide-hero-image {
+        object-fit: contain;
+        object-position: center top;
       }
 
       .hero h1 {
-        font-size: clamp(2.05rem, 11vw, 3.05rem);
-        line-height: 0.98;
+        max-width: 11ch;
+        font-size: clamp(1.62rem, 7.2vw, 2.2rem);
+        line-height: 1.02;
         letter-spacing: -0.055em;
       }
 
       .hero-desc {
-        max-width: 31ch;
+        max-width: 28ch;
         font-size: clamp(0.9rem, 4vw, 1rem);
         line-height: 1.48;
+        text-align: center;
       }
 
       .hero-desc br {
@@ -9439,7 +9492,8 @@
 
       .hero-actions {
         width: 100%;
-        align-items: stretch;
+        justify-content: center;
+        align-items: center;
       }
 
       .hero-actions .btn-primary {
@@ -9448,9 +9502,17 @@
       }
 
       .btn-whatsapp {
-        width: 48px;
-        min-width: 48px;
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+        flex: 0 0 50px;
         padding: 0;
+        border-radius: 999px;
+        align-self: center;
+      }
+
+      .eyebrow {
+        align-self: center;
       }
 
       .slider-nav {
