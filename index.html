@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Orceu</title>
-  <link rel="preload" as="image" href="assets/banner-principal-hero.webp" imagesrcset="assets/banner-principal-hero.webp 1600w, assets/banner-principal-hero@2x.webp 2400w" imagesizes="100vw" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/lucas-bruna-desktop.webp" fetchpriority="high">
   <link rel="preload" href="assets/axiforma-book.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/axiforma-black.woff2" as="font" type="font/woff2" crossorigin>
   <style>
@@ -723,6 +723,8 @@
       padding-bottom: 130px;
       opacity: 0;
       background: var(--slide-bg);
+      overflow: hidden;
+      isolation: isolate;
       transition: opacity 800ms ease;
     }
 
@@ -731,26 +733,27 @@
       opacity: 1;
     }
 
-    .slide-main {
-      --slide-bg: linear-gradient(135deg, #244cb6 0%, #193b95 58%, #10295f 100%);
-      overflow: hidden;
-      isolation: isolate;
-    }
-
-    .slide-main::before {
+    .slide::before {
       position: absolute;
       inset: 0;
       z-index: 1;
       pointer-events: none;
       content: "";
-      background: linear-gradient(90deg, rgba(5, 11, 34, 0.76) 0%, rgba(5, 11, 34, 0.58) 36%, rgba(5, 11, 34, 0.12) 64%, rgba(5, 11, 34, 0.18) 100%);
+      background: var(--slide-overlay, linear-gradient(90deg, rgba(5, 11, 34, 0.82) 0%, rgba(5, 11, 34, 0.62) 36%, rgba(5, 11, 34, 0.18) 64%, rgba(5, 11, 34, 0.14) 100%));
+    }
+
+    .slide-main {
+      --slide-bg: linear-gradient(135deg, #244cb6 0%, #193b95 58%, #10295f 100%);
+      --slide-overlay: linear-gradient(90deg, rgba(5, 11, 34, 0.76) 0%, rgba(5, 11, 34, 0.58) 36%, rgba(5, 11, 34, 0.12) 64%, rgba(5, 11, 34, 0.18) 100%);
     }
 
     .slide-hero-media {
       position: absolute;
       inset: 0;
       z-index: 0;
-      display: block;
+      display: flex;
+      align-items: stretch;
+      justify-content: flex-end;
       pointer-events: none;
     }
 
@@ -758,12 +761,31 @@
       display: block;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      object-position: center center;
+      object-fit: contain;
+      object-position: right center;
+      transform-origin: right center;
+      transform: scale(1);
+      transition: transform 420ms ease, object-fit 420ms ease;
     }
-    .slide-1 { --slide-bg: rgba(33, 70, 173, 0.45); }
-    .slide-2 { --slide-bg: rgba(16, 19, 31, 0.6); }
-    .slide-3 { --slide-bg: rgba(8, 113, 95, 0.45); }
+
+    .slide-hero-media.needs-zoom .slide-hero-image {
+      object-fit: cover;
+      transform: scale(1.06) translateY(-1.5%);
+    }
+    .slide-1 {
+      --slide-bg: linear-gradient(135deg, #16306e 0%, #1d3e8a 55%, #0f214a 100%);
+      --slide-overlay: linear-gradient(90deg, rgba(6, 13, 32, 0.84) 0%, rgba(6, 13, 32, 0.62) 34%, rgba(6, 13, 32, 0.2) 66%, rgba(6, 13, 32, 0.1) 100%);
+    }
+
+    .slide-2 {
+      --slide-bg: linear-gradient(135deg, #0f172f 0%, #182344 52%, #0b1225 100%);
+      --slide-overlay: linear-gradient(90deg, rgba(4, 8, 20, 0.86) 0%, rgba(4, 8, 20, 0.66) 36%, rgba(4, 8, 20, 0.22) 66%, rgba(4, 8, 20, 0.12) 100%);
+    }
+
+    .slide-3 {
+      --slide-bg: linear-gradient(135deg, #2d211a 0%, #1e140f 52%, #120b08 100%);
+      --slide-overlay: linear-gradient(90deg, rgba(8, 7, 8, 0.86) 0%, rgba(8, 7, 8, 0.66) 36%, rgba(8, 7, 8, 0.22) 66%, rgba(8, 7, 8, 0.1) 100%);
+    }
 
     .slide-inner {
       position: relative;
@@ -9386,6 +9408,19 @@
         padding-bottom: clamp(118px, 18vh, 150px);
       }
 
+      .slide::before {
+        background: linear-gradient(180deg, rgba(6, 10, 22, 0.16) 0%, rgba(6, 10, 22, 0.24) 28%, rgba(6, 10, 22, 0.6) 62%, rgba(6, 10, 22, 0.9) 100%);
+      }
+
+      .slide-hero-image {
+        object-position: center top;
+        transform-origin: center top;
+      }
+
+      .slide-hero-media.needs-zoom .slide-hero-image {
+        transform: scale(1.08) translateY(-1%);
+      }
+
       .slide-inner {
         max-width: 100%;
       }
@@ -9952,17 +9987,15 @@
       <article class="slide slide-main is-active">
         <picture class="slide-hero-media" aria-hidden="true">
           <source
-            srcset="assets/banner-principal-hero.webp 1600w, assets/banner-principal-hero@2x.webp 2400w"
-            sizes="100vw"
+            media="(max-width: 680px)"
+            srcset="assets/lucas-bruna-mobile.webp"
             type="image/webp">
           <img
             class="slide-hero-image"
-            src="assets/banner-principal-hero.webp"
-            srcset="assets/banner-principal-hero.webp 1600w, assets/banner-principal-hero@2x.webp 2400w"
-            sizes="100vw"
+            src="assets/lucas-bruna-desktop.webp"
             alt=""
-            width="1600"
-            height="723"
+            width="3437"
+            height="1417"
             fetchpriority="high"
             loading="eager"
             decoding="async">
@@ -9979,10 +10012,24 @@
       </article>
 
       <article class="slide slide-1">
+        <picture class="slide-hero-media" aria-hidden="true">
+          <source
+            media="(max-width: 680px)"
+            srcset="assets/notebook-mobile.webp"
+            type="image/webp">
+          <img
+            class="slide-hero-image"
+            src="assets/notebook-desktop.webp"
+            alt=""
+            width="3437"
+            height="1417"
+            loading="lazy"
+            decoding="async">
+        </picture>
         <div class="slide-inner">
-          <p class="eyebrow">Copiloto oficial da <a class="riow-logo-link" href="https://www.instagram.com/riow.construcao/" target="_blank" rel="noreferrer"><img class="inline-riow-logo" src="https://cdn.prod.website-files.com/6492e8ffc454a19867291571/6a2c48775857d6e93c22030f_Ativo%2050.png" alt="Riow"></a></p>
-          <h1>Da Obra Caos<br>para a Obra Próspera.</h1>
-          <p class="hero-desc">O copiloto digital criado dentro de uma construtora ativa para tirar engenheiros, arquitetos e donos de construtora do improviso e colocar método onde só existia sobrevivência.</p>
+          <p class="eyebrow">Orceu Copiloto</p>
+          <h1>O único copiloto<br>da construção civil<br>criado dentro de<br>uma construtora.</h1>
+          <p class="hero-desc">Orçamento, suprimentos e financeiro integrados num único fluxo. Cada função nasceu resolvendo um problema real, com obra rodando e dinheiro de verdade em jogo.</p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="#solucoes">Explorar soluções <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
             <a class="btn btn-whatsapp" href="https://wa.link/703xe3" target="_blank" rel="noopener noreferrer" aria-label="Solicitar contato pelo WhatsApp"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M16.02 4.5c-6.31 0-11.42 5.08-11.42 11.34 0 2.14.6 4.14 1.64 5.85L4.5 27.5l5.98-1.7a11.5 11.5 0 0 0 5.54 1.42c6.31 0 11.42-5.08 11.42-11.34S22.33 4.5 16.02 4.5Zm0 20.75c-1.78 0-3.44-.5-4.86-1.36l-.42-.25-3.28.93.95-3.18-.28-.45a9.24 9.24 0 0 1-1.56-5.1c0-5.18 4.24-9.38 9.45-9.38s9.45 4.2 9.45 9.38-4.24 9.41-9.45 9.41Zm5.42-7.02c-.3-.15-1.76-.86-2.03-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.95 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.47-.89-.79-1.49-1.76-1.66-2.06-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.6-.92-2.19-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.01-1.04 2.46 0 1.45 1.07 2.86 1.21 3.06.15.2 2.1 3.18 5.08 4.46.71.3 1.26.48 1.7.62.71.22 1.36.19 1.87.11.57-.08 1.76-.72 2-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35Z" clip-rule="evenodd"/></svg></a>
@@ -9991,10 +10038,24 @@
       </article>
 
       <article class="slide slide-2">
+        <picture class="slide-hero-media" aria-hidden="true">
+          <source
+            media="(max-width: 680px)"
+            srcset="assets/empresarial-mobile.webp"
+            type="image/webp">
+          <img
+            class="slide-hero-image"
+            src="assets/empresarial-desktop.webp"
+            alt=""
+            width="3437"
+            height="1417"
+            loading="lazy"
+            decoding="async">
+        </picture>
         <div class="slide-inner">
-          <p class="eyebrow">Software · Método · Comunidade</p>
-          <h1>O ecossistema completo<br>da construção civil.</h1>
-          <p class="hero-desc">Software com IA, imersão presencial e comunidade de pares, unidos pelo Método OP para levar sua construtora da Obra Caos à Obra Próspera.</p>
+          <p class="eyebrow">Turma 18 . Inscrições abertas</p>
+          <h1>A única imersão da<br>construção civil que<br>acontece dentro de<br>uma construtora ativa.</h1>
+          <p class="hero-desc">Três dias com Lucas Arruda dentro da Riow Construção, com obra rodando e método aplicado ao vivo. Vagas limitadas para quem quer construir uma operação que funciona sem depender do dono.</p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="#solucoes">Explorar soluções <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
             <a class="btn btn-whatsapp" href="https://wa.link/703xe3" target="_blank" rel="noopener noreferrer" aria-label="Solicitar contato pelo WhatsApp"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M16.02 4.5c-6.31 0-11.42 5.08-11.42 11.34 0 2.14.6 4.14 1.64 5.85L4.5 27.5l5.98-1.7a11.5 11.5 0 0 0 5.54 1.42c6.31 0 11.42-5.08 11.42-11.34S22.33 4.5 16.02 4.5Zm0 20.75c-1.78 0-3.44-.5-4.86-1.36l-.42-.25-3.28.93.95-3.18-.28-.45a9.24 9.24 0 0 1-1.56-5.1c0-5.18 4.24-9.38 9.45-9.38s9.45 4.2 9.45 9.38-4.24 9.41-9.45 9.41Zm5.42-7.02c-.3-.15-1.76-.86-2.03-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.95 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.47-.89-.79-1.49-1.76-1.66-2.06-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.6-.92-2.19-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.01-1.04 2.46 0 1.45 1.07 2.86 1.21 3.06.15.2 2.1 3.18 5.08 4.46.71.3 1.26.48 1.7.62.71.22 1.36.19 1.87.11.57-.08 1.76-.72 2-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35Z" clip-rule="evenodd"/></svg></a>
@@ -10003,10 +10064,24 @@
       </article>
 
       <article class="slide slide-3">
+        <picture class="slide-hero-media" aria-hidden="true">
+          <source
+            media="(max-width: 680px)"
+            srcset="assets/lucas-mobile.webp"
+            type="image/webp">
+          <img
+            class="slide-hero-image"
+            src="assets/lucas-desktop.webp"
+            alt=""
+            width="3437"
+            height="1417"
+            loading="lazy"
+            decoding="async">
+        </picture>
         <div class="slide-inner">
-          <p class="eyebrow">Método OP em operation</p>
-          <h1>Obra que roda<br>quando você não está.</h1>
-          <p class="hero-desc">Operação estruturada, equipe com autonomia, margem em tempo real. Criado dentro da <a class="riow-logo-link" href="https://www.instagram.com/riow.construcao/" target="_blank" rel="noreferrer"><img class="inline-riow-logo" src="https://cdn.prod.website-files.com/6492e8ffc454a19867291571/6a2c48775857d6e93c22030f_Ativo%2050.png" alt="Riow"></a>, testado em mais de 130 obras e R$ 200MM geridos.</p>
+          <p class="eyebrow">Nosso método</p>
+          <h1>O Método OP, que<br>geriu R$ 200 milhões,<br>nasceu dentro de<br>obra real.</h1>
+          <p class="hero-desc">Testado em mais de 130 obras e 26 obras simultâneas conduzidas sem caos. A metodologia que separa quem opera no improviso de quem constrói com clareza, controle e previsibilidade.</p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="#solucoes">Explorar soluções <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
             <a class="btn btn-whatsapp" href="https://wa.link/703xe3" target="_blank" rel="noopener noreferrer" aria-label="Solicitar contato pelo WhatsApp"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M16.02 4.5c-6.31 0-11.42 5.08-11.42 11.34 0 2.14.6 4.14 1.64 5.85L4.5 27.5l5.98-1.7a11.5 11.5 0 0 0 5.54 1.42c6.31 0 11.42-5.08 11.42-11.34S22.33 4.5 16.02 4.5Zm0 20.75c-1.78 0-3.44-.5-4.86-1.36l-.42-.25-3.28.93.95-3.18-.28-.45a9.24 9.24 0 0 1-1.56-5.1c0-5.18 4.24-9.38 9.45-9.38s9.45 4.2 9.45 9.38-4.24 9.41-9.45 9.41Zm5.42-7.02c-.3-.15-1.76-.86-2.03-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.95 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.47-.89-.79-1.49-1.76-1.66-2.06-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.6-.92-2.19-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.01-1.04 2.46 0 1.45 1.07 2.86 1.21 3.06.15.2 2.1 3.18 5.08 4.46.71.3 1.26.48 1.7.62.71.22 1.36.19 1.87.11.57-.08 1.76-.72 2-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35Z" clip-rule="evenodd"/></svg></a>
@@ -10813,10 +10888,35 @@
     const slides = Array.from(document.querySelectorAll(".slide"));
     const arrows = Array.from(document.querySelectorAll(".slider-arrow"));
     const slidesContainer = document.querySelector(".slides");
+    const slideHeroMedia = Array.from(document.querySelectorAll(".slide-hero-media"));
     const colors = ["#2146AD", "#2146AD", "#10131F", "#08715F"];
     const slideDurations = [18000, 12000, 12000, 12000];
     let cur = 0;
     let timer = setTimeout(next, slideDurations[cur]);
+
+    function syncHeroMediaFit() {
+      slideHeroMedia.forEach((media) => {
+        const image = media.querySelector(".slide-hero-image");
+        if (!image) return;
+
+        const rect = media.getBoundingClientRect();
+        const naturalWidth = image.naturalWidth;
+        const naturalHeight = image.naturalHeight;
+
+        if (!rect.width || !rect.height || !naturalWidth || !naturalHeight) return;
+
+        const imageRatio = naturalWidth / naturalHeight;
+        const containerRatio = rect.width / rect.height;
+        const containsByWidth = containerRatio <= imageRatio;
+        const renderedWidth = containsByWidth ? rect.width : rect.height * imageRatio;
+        const renderedHeight = containsByWidth ? rect.width / imageRatio : rect.height;
+        const horizontalGap = rect.width - renderedWidth;
+        const verticalGap = rect.height - renderedHeight;
+        const shouldZoom = horizontalGap > 24 || verticalGap > 24;
+
+        media.classList.toggle("needs-zoom", shouldZoom);
+      });
+    }
 
     function go(i) {
       cur = (i + slides.length) % slides.length;
@@ -10833,6 +10933,9 @@
     }
 
     arrows.forEach(a => a.addEventListener("click", () => { go(cur + +a.dataset.dir); }));
+    window.addEventListener("load", syncHeroMediaFit);
+    window.addEventListener("resize", syncHeroMediaFit, { passive: true });
+    window.requestAnimationFrame(syncHeroMediaFit);
 
     (() => {
       const faqItems = Array.from(document.querySelectorAll(".faq-item"));
