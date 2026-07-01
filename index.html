@@ -1716,7 +1716,10 @@
     }
 
     .logo-marquee-track {
-      display: flex;
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      align-items: center;
       width: max-content;
       animation: logoMarquee 26s linear infinite;
       will-change: transform;
@@ -1727,7 +1730,9 @@
     }
 
     .logo-marquee-group {
-      display: flex;
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
       align-items: center;
       flex: 0 0 auto;
       gap: clamp(42px, 4vw, 72px);
