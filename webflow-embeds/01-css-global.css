@@ -5904,13 +5904,13 @@
 
       .hero h1 {
         max-width: none;
-        font-size: clamp(1.48rem, 5.8vw, 1.8rem);
+        font-size: clamp(1.36rem, 5.2vw, 1.66rem);
         line-height: 0.98;
         text-wrap: balance;
       }
 
       .hero h1 br {
-        display: none;
+        display: initial;
       }
 
       .hero-desc {
@@ -9882,20 +9882,20 @@
 
       .hero h1 {
         max-width: none;
-        font-size: clamp(1.5rem, 5.9vw, 1.84rem);
+        font-size: clamp(1.34rem, 5.15vw, 1.62rem);
         line-height: 0.98;
         letter-spacing: -0.05em;
         text-wrap: balance;
       }
 
       .hero h1 br {
-        display: none;
+        display: initial;
       }
 
       .hero-desc {
         max-width: min(100%, 22rem);
         margin-top: 12px;
-        font-size: clamp(0.64rem, 2.7vw, 0.74rem);
+        font-size: clamp(0.6rem, 2.45vw, 0.68rem);
         line-height: 1.28;
         letter-spacing: 0;
         text-align: center;
@@ -9903,7 +9903,7 @@
       }
 
       .hero-desc br {
-        display: none;
+        display: initial;
       }
 
       .hero-actions {
@@ -10438,13 +10438,13 @@
       }
 
       .hero h1 {
-        font-size: clamp(1.3rem, 5.6vw, 1.54rem);
+        font-size: clamp(1.22rem, 5vw, 1.42rem);
         line-height: 0.98;
       }
 
       .hero-desc {
         max-width: min(100%, 20.25rem);
-        font-size: clamp(0.62rem, 2.55vw, 0.7rem);
+        font-size: clamp(0.58rem, 2.35vw, 0.64rem);
         line-height: 1.26;
         letter-spacing: 0;
       }
