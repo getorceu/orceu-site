@@ -227,8 +227,16 @@
 
     <div class="hero-bottom">
       <nav class="slider-nav" aria-label="Controles do banner">
-        <button class="slider-arrow" type="button" data-dir="-1" aria-label="Anterior"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4l-4 4 4 4"/></svg></button>
-        <button class="slider-arrow" type="button" data-dir="1" aria-label="Próximo"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg></button>
+        <div class="slider-arrows">
+          <button class="slider-arrow" type="button" data-dir="-1" aria-label="Anterior"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4l-4 4 4 4"/></svg></button>
+          <button class="slider-arrow" type="button" data-dir="1" aria-label="Próximo"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg></button>
+        </div>
+        <div class="slider-progress" aria-label="Indicadores de progresso do banner">
+          <button class="slider-progress-bar is-active" type="button" data-slide="0" aria-label="Ir para banner 1"></button>
+          <button class="slider-progress-bar" type="button" data-slide="1" aria-label="Ir para banner 2"></button>
+          <button class="slider-progress-bar" type="button" data-slide="2" aria-label="Ir para banner 3"></button>
+          <button class="slider-progress-bar" type="button" data-slide="3" aria-label="Ir para banner 4"></button>
+        </div>
       </nav>
     </div>
   </main>

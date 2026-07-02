@@ -1,10 +1,16 @@
     const slides = Array.from(document.querySelectorAll(".slide"));
     const arrows = Array.from(document.querySelectorAll(".slider-arrow"));
+    const progressBars = Array.from(document.querySelectorAll(".slider-progress-bar"));
     const slidesContainer = document.querySelector(".slides");
     const colors = ["#2146AD", "#2146AD", "#10131F", "#08715F"];
     const slideDurations = [18000, 12000, 12000, 12000];
     let cur = 0;
-    let timer = setTimeout(next, slideDurations[cur]);
+    let timer = 0;
+    let progressFrame = 0;
+    let progressStartedAt = 0;
+    let swipeStartX = 0;
+    let swipeStartY = 0;
+    let isSwiping = false;
 
     function go(i) {
       cur = (i + slides.length) % slides.length;
@@ -15,12 +21,73 @@
 
     function next() { go(cur + 1); }
 
+    function renderProgress(value) {
+      progressBars.forEach((bar, idx) => {
+        const active = idx === cur;
+        bar.classList.toggle("is-active", active);
+        if (active) {
+          bar.setAttribute("aria-current", "true");
+        } else {
+          bar.removeAttribute("aria-current");
+        }
+        bar.style.setProperty("--progress", active ? String(value) : "0");
+      });
+    }
+
+    function stopProgress() {
+      if (progressFrame) window.cancelAnimationFrame(progressFrame);
+      progressFrame = 0;
+    }
+
+    function animateProgress(now) {
+      const duration = slideDurations[cur] || 12000;
+      const progress = Math.min((now - progressStartedAt) / duration, 1);
+      renderProgress(progress);
+      if (progress < 1) {
+        progressFrame = window.requestAnimationFrame(animateProgress);
+      }
+    }
+
+    function restartProgress() {
+      stopProgress();
+      progressStartedAt = performance.now();
+      renderProgress(0);
+      progressFrame = window.requestAnimationFrame(animateProgress);
+    }
+
     function reset() {
       clearTimeout(timer);
       timer = setTimeout(next, slideDurations[cur] || 12000);
+      restartProgress();
     }
 
     arrows.forEach(a => a.addEventListener("click", () => { go(cur + +a.dataset.dir); }));
+    progressBars.forEach((bar, idx) => bar.addEventListener("click", () => { go(idx); }));
+
+    if (slidesContainer) {
+      slidesContainer.addEventListener("pointerdown", (event) => {
+        if (event.target.closest("a, button")) return;
+        swipeStartX = event.clientX;
+        swipeStartY = event.clientY;
+        isSwiping = true;
+      }, { passive: true });
+
+      slidesContainer.addEventListener("pointerup", (event) => {
+        if (!isSwiping) return;
+        const deltaX = event.clientX - swipeStartX;
+        const deltaY = event.clientY - swipeStartY;
+        isSwiping = false;
+
+        if (Math.abs(deltaX) < 44 || Math.abs(deltaX) < Math.abs(deltaY) * 1.2) return;
+        go(cur + (deltaX < 0 ? 1 : -1));
+      }, { passive: true });
+
+      slidesContainer.addEventListener("pointercancel", () => {
+        isSwiping = false;
+      }, { passive: true });
+    }
+
+    reset();
 
     (() => {
       const faqItems = Array.from(document.querySelectorAll(".faq-item"));

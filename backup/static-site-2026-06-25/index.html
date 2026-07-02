@@ -701,6 +701,7 @@
       border-radius: 0;
       overflow: hidden;
       background: transparent;
+      touch-action: pan-y;
     }
 
     .slides::after {
@@ -1000,7 +1001,16 @@
 
     .slider-nav {
       display: flex;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .slider-arrows {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       gap: 6px;
     }
 
@@ -1026,6 +1036,46 @@
     .slider-arrow svg {
       width: 14px;
       height: 14px;
+    }
+
+    .slider-progress {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: auto;
+    }
+
+    .slider-progress-bar {
+      --progress: 0;
+      position: relative;
+      width: 42px;
+      height: 4px;
+      padding: 0;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.22);
+      border: 0;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .slider-progress-bar::before {
+      position: absolute;
+      inset: 0;
+      content: "";
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: inherit;
+      transform: scaleX(var(--progress));
+      transform-origin: left center;
+      transition: transform 120ms linear;
+    }
+
+    .slider-progress-bar.is-active {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .slider-progress-bar:not(.is-active)::before {
+      transform: scaleX(0);
     }
 
     .blue-group {
@@ -5840,6 +5890,21 @@
         padding: 0 20px 44px;
       }
 
+      .slider-nav {
+        display: inline-flex;
+        gap: 7px;
+        padding: 7px 10px 8px;
+        background: rgba(10, 18, 41, 0.54);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 999px;
+        -webkit-backdrop-filter: blur(14px);
+        backdrop-filter: blur(14px);
+      }
+
+      .slider-arrows {
+        gap: 8px;
+      }
+
       .hero-actions {
         flex-wrap: wrap;
         gap: 10px;
@@ -5854,8 +5919,24 @@
       }
 
       .slider-arrow {
-        width: 36px;
-        height: 36px;
+        width: 28px;
+        height: 28px;
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.16);
+      }
+
+      .slider-arrow svg {
+        width: 12px;
+        height: 12px;
+      }
+
+      .slider-progress {
+        gap: 5px;
+      }
+
+      .slider-progress-bar {
+        width: 30px;
+        height: 3px;
       }
 
       .ecosystem {
@@ -10312,8 +10393,16 @@
 
     <div class="hero-bottom">
       <nav class="slider-nav" aria-label="Controles do banner">
-        <button class="slider-arrow" type="button" data-dir="-1" aria-label="Anterior"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4l-4 4 4 4"/></svg></button>
-        <button class="slider-arrow" type="button" data-dir="1" aria-label="Próximo"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg></button>
+        <div class="slider-arrows">
+          <button class="slider-arrow" type="button" data-dir="-1" aria-label="Anterior"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4l-4 4 4 4"/></svg></button>
+          <button class="slider-arrow" type="button" data-dir="1" aria-label="Próximo"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg></button>
+        </div>
+        <div class="slider-progress" aria-label="Indicadores de progresso do banner">
+          <button class="slider-progress-bar is-active" type="button" data-slide="0" aria-label="Ir para banner 1"></button>
+          <button class="slider-progress-bar" type="button" data-slide="1" aria-label="Ir para banner 2"></button>
+          <button class="slider-progress-bar" type="button" data-slide="2" aria-label="Ir para banner 3"></button>
+          <button class="slider-progress-bar" type="button" data-slide="3" aria-label="Ir para banner 4"></button>
+        </div>
       </nav>
     </div>
   </main>
@@ -11108,11 +11197,17 @@
   <script>
     const slides = Array.from(document.querySelectorAll(".slide"));
     const arrows = Array.from(document.querySelectorAll(".slider-arrow"));
+    const progressBars = Array.from(document.querySelectorAll(".slider-progress-bar"));
     const slidesContainer = document.querySelector(".slides");
     const colors = ["#2146AD", "#2146AD", "#10131F", "#08715F"];
     const slideDurations = [18000, 12000, 12000, 12000];
     let cur = 0;
-    let timer = setTimeout(next, slideDurations[cur]);
+    let timer = 0;
+    let progressFrame = 0;
+    let progressStartedAt = 0;
+    let swipeStartX = 0;
+    let swipeStartY = 0;
+    let isSwiping = false;
 
     function go(i) {
       cur = (i + slides.length) % slides.length;
@@ -11123,12 +11218,73 @@
 
     function next() { go(cur + 1); }
 
+    function renderProgress(value) {
+      progressBars.forEach((bar, idx) => {
+        const active = idx === cur;
+        bar.classList.toggle("is-active", active);
+        if (active) {
+          bar.setAttribute("aria-current", "true");
+        } else {
+          bar.removeAttribute("aria-current");
+        }
+        bar.style.setProperty("--progress", active ? String(value) : "0");
+      });
+    }
+
+    function stopProgress() {
+      if (progressFrame) window.cancelAnimationFrame(progressFrame);
+      progressFrame = 0;
+    }
+
+    function animateProgress(now) {
+      const duration = slideDurations[cur] || 12000;
+      const progress = Math.min((now - progressStartedAt) / duration, 1);
+      renderProgress(progress);
+      if (progress < 1) {
+        progressFrame = window.requestAnimationFrame(animateProgress);
+      }
+    }
+
+    function restartProgress() {
+      stopProgress();
+      progressStartedAt = performance.now();
+      renderProgress(0);
+      progressFrame = window.requestAnimationFrame(animateProgress);
+    }
+
     function reset() {
       clearTimeout(timer);
       timer = setTimeout(next, slideDurations[cur] || 12000);
+      restartProgress();
     }
 
     arrows.forEach(a => a.addEventListener("click", () => { go(cur + +a.dataset.dir); }));
+    progressBars.forEach((bar, idx) => bar.addEventListener("click", () => { go(idx); }));
+
+    if (slidesContainer) {
+      slidesContainer.addEventListener("pointerdown", (event) => {
+        if (event.target.closest("a, button")) return;
+        swipeStartX = event.clientX;
+        swipeStartY = event.clientY;
+        isSwiping = true;
+      }, { passive: true });
+
+      slidesContainer.addEventListener("pointerup", (event) => {
+        if (!isSwiping) return;
+        const deltaX = event.clientX - swipeStartX;
+        const deltaY = event.clientY - swipeStartY;
+        isSwiping = false;
+
+        if (Math.abs(deltaX) < 44 || Math.abs(deltaX) < Math.abs(deltaY) * 1.2) return;
+        go(cur + (deltaX < 0 ? 1 : -1));
+      }, { passive: true });
+
+      slidesContainer.addEventListener("pointercancel", () => {
+        isSwiping = false;
+      }, { passive: true });
+    }
+
+    reset();
 
     (() => {
       const faqItems = Array.from(document.querySelectorAll(".faq-item"));
