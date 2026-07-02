@@ -1008,7 +1008,7 @@
     }
 
     .slider-arrows {
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       gap: 6px;
@@ -5945,17 +5945,17 @@
 
       .slider-nav {
         display: inline-flex;
-        gap: 7px;
-        padding: 7px 10px 8px;
-        background: rgba(10, 18, 41, 0.54);
-        border: 1px solid rgba(255, 255, 255, 0.14);
+        gap: 0;
+        padding: 0;
+        background: transparent;
+        border: 0;
         border-radius: 999px;
-        -webkit-backdrop-filter: blur(14px);
-        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
       }
 
       .slider-arrows {
-        gap: 8px;
+        display: none;
       }
 
       .slider-arrow {
@@ -10373,7 +10373,7 @@
       }
 
       .slider-nav {
-        padding: 6px 9px 7px;
+        padding: 0;
       }
 
       .hero h1 {

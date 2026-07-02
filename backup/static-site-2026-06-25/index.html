@@ -1008,7 +1008,7 @@
     }
 
     .slider-arrows {
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       gap: 6px;
@@ -5892,17 +5892,17 @@
 
       .slider-nav {
         display: inline-flex;
-        gap: 7px;
-        padding: 7px 10px 8px;
-        background: rgba(10, 18, 41, 0.54);
-        border: 1px solid rgba(255, 255, 255, 0.14);
+        gap: 0;
+        padding: 0;
+        background: transparent;
+        border: 0;
         border-radius: 999px;
-        -webkit-backdrop-filter: blur(14px);
-        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
       }
 
       .slider-arrows {
-        gap: 8px;
+        display: none;
       }
 
       .hero-actions {
@@ -10393,10 +10393,6 @@
 
     <div class="hero-bottom">
       <nav class="slider-nav" aria-label="Controles do banner">
-        <div class="slider-arrows">
-          <button class="slider-arrow" type="button" data-dir="-1" aria-label="Anterior"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4l-4 4 4 4"/></svg></button>
-          <button class="slider-arrow" type="button" data-dir="1" aria-label="Próximo"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg></button>
-        </div>
         <div class="slider-progress" aria-label="Indicadores de progresso do banner">
           <button class="slider-progress-bar is-active" type="button" data-slide="0" aria-label="Ir para banner 1"></button>
           <button class="slider-progress-bar" type="button" data-slide="1" aria-label="Ir para banner 2"></button>
