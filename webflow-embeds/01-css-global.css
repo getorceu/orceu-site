@@ -697,10 +697,10 @@
       bottom: 0;
       left: max(56px, calc((100vw - 1140px) / 2));
       z-index: 8;
-      height: 1px;
+      height: 3px;
       pointer-events: none;
       content: "";
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.84) 18%, rgba(255, 255, 255, 0.84) 82%, transparent);
+      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.98) 0%, rgba(205, 225, 255, 0.76) 36%, rgba(63, 106, 210, 0.5) 70%, rgba(33, 70, 173, 0) 100%);
     }
 
     .slide {
@@ -5979,7 +5979,7 @@
       }
 
       .ecosystem {
-        padding: 48px 20px var(--blue-stack-gap);
+        padding: 0 20px var(--blue-stack-gap);
       }
 
       .logo-marquee-section {
@@ -9805,7 +9805,10 @@
       }
 
       .slides::after {
-        display: none;
+        right: 0;
+        left: 0;
+        display: block;
+        height: 3px;
       }
 
       .slide {
@@ -10434,8 +10437,8 @@
       }
 
       .slides::after {
-        right: 14px;
-        left: 14px;
+        right: 0;
+        left: 0;
       }
 
       .hero-bottom {
