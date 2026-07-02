@@ -6081,6 +6081,13 @@
     }
 
     @media (max-width: 680px) {
+      .hero {
+        min-height: 0;
+        height: 125vw;
+        max-height: 100svh;
+        background: transparent;
+      }
+
       .site-header {
         top: 0;
         width: 100%;
@@ -6138,7 +6145,7 @@
       }
 
       .slide {
-        padding: 110px 22px 118px;
+        padding: 88px 22px 56px;
       }
 
       .slide-with-media::before {
@@ -6160,7 +6167,7 @@
 
       .slide-inner {
         max-width: min(100%, 21rem);
-        margin: 0 auto 44px;
+        margin: 0 auto 30px;
         align-items: center;
         text-align: center;
       }
@@ -6193,9 +6200,10 @@
       }
 
       .hero-bottom {
+        bottom: 10px;
         justify-content: center;
         align-items: flex-end;
-        padding: 0 16px 14px;
+        padding: 0 16px;
       }
 
       .hero-actions {
@@ -10638,7 +10646,8 @@
       }
 
       .hero-bottom {
-        padding-bottom: 18px;
+        bottom: 10px;
+        padding-bottom: 0;
       }
 
       .slider-nav {
