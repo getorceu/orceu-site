@@ -7,6 +7,7 @@ import {
   getRadarCategory,
 } from "@/lib/radar-news";
 import { getSiteUrl } from "@/lib/site-config";
+import { RadarPageChrome } from "../../radar-page-chrome";
 
 type RadarCategoryPageProps = {
   params: Promise<{
@@ -85,12 +86,7 @@ export default async function RadarCategoryPage({
   };
 
   return (
-    <main
-      style={{
-        background: "linear-gradient(180deg,#eef4ff 0%,#ffffff 28%)",
-        minHeight: "100vh",
-      }}
-    >
+    <RadarPageChrome>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
@@ -225,6 +221,6 @@ export default async function RadarCategoryPage({
           ))}
         </div>
       </section>
-    </main>
+    </RadarPageChrome>
   );
 }

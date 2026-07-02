@@ -8,6 +8,7 @@ import {
   slugifyRadarCategory,
 } from "@/lib/radar-news";
 import { getSiteUrl } from "@/lib/site-config";
+import { RadarPageChrome } from "../radar-page-chrome";
 
 type ArticlePageProps = {
   params: Promise<{
@@ -123,13 +124,7 @@ export default async function RadarArticlePage({ params }: ArticlePageProps) {
   };
 
   return (
-    <main
-      style={{
-        background: "linear-gradient(180deg,#eef4ff 0%,#ffffff 30%)",
-        minHeight: "100vh",
-        color: "#123",
-      }}
-    >
+    <RadarPageChrome>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -376,6 +371,6 @@ export default async function RadarArticlePage({ params }: ArticlePageProps) {
           </section>
         ) : null}
       </section>
-    </main>
+    </RadarPageChrome>
   );
 }
