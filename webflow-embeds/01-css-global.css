@@ -9921,27 +9921,37 @@
         width: 100%;
         justify-content: center;
         align-items: center;
-        gap: 12px;
+        gap: 7px;
         margin-top: 12px;
       }
 
       .hero-actions .btn-primary {
         flex: 0 1 auto;
-        min-width: 172px;
-        max-width: 196px;
+        min-width: 118px;
+        max-width: 118px;
+        height: 28px;
         justify-content: center;
-        padding-inline: 18px;
+        gap: 6px;
+        padding-inline: 10px;
+        font-size: 0.52rem;
+        border-radius: 10px;
       }
 
       .btn-whatsapp {
-        width: 50px;
-        height: 50px;
-        min-width: 50px;
-        flex: 0 0 50px;
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        flex: 0 0 30px;
         padding: 0;
         border-radius: 999px;
         align-self: center;
         aspect-ratio: 1 / 1;
+      }
+
+      .hero-actions .btn.btn-whatsapp svg,
+      .hero-actions .btn.btn-whatsapp:hover svg {
+        width: 21px;
+        height: 21px;
       }
 
       .eyebrow {
