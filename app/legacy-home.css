@@ -9699,8 +9699,9 @@
       }
 
       .hero {
-        min-height: 100svh;
-        max-height: 100svh;
+        height: calc(100vw * 1.2916);
+        min-height: calc(100vw * 1.2916);
+        max-height: none;
       }
 
       .slides::after {
@@ -9708,20 +9709,24 @@
       }
 
       .slide {
-        align-items: flex-end;
-        padding-top: 104px;
+        align-items: stretch;
+        padding-top: 0;
         padding-right: var(--mobile-gutter);
         padding-left: var(--mobile-gutter);
-        padding-bottom: 78px;
+        padding-bottom: 0;
         background: transparent;
       }
 
       .slide-inner {
+        position: absolute;
+        right: var(--mobile-gutter);
+        bottom: clamp(68px, 17vw, 96px);
+        left: var(--mobile-gutter);
         max-width: min(100%, 20.5rem);
         margin: 0 auto 0;
         align-items: center;
         text-align: center;
-        transform: translateY(-54px);
+        transform: none;
       }
 
       .slide-with-media::before {
