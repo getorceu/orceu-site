@@ -10154,9 +10154,18 @@
         line-height: 1.42;
       }
 
+      .product-card.mind .product-text {
+        font-size: 0.64rem;
+        line-height: 1.34;
+      }
+
       .card-actions {
         grid-area: actions;
+        display: flex;
+        align-items: center;
+        gap: 10px;
         padding-top: 14px;
+        overflow: visible;
       }
 
       .card-cta {
